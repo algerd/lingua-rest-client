@@ -39,6 +39,8 @@ public class WordPaneController extends EntityController<Word> {
     private Label transcriptionLabel; 
     @FXML
     private Label translationLabel; 
+    @FXML
+    private Label createdLabel; 
     
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -54,6 +56,7 @@ public class WordPaneController extends EntityController<Word> {
         wordLabel.textProperty().bind(resource.getContent().wordProperty());                                 
         transcriptionLabel.textProperty().bind(resource.getContent().transcriptionProperty());
         translationLabel.textProperty().bind(resource.getContent().translationProperty());
+        createdLabel.setText(resource.getContent().getCreated().toString());
         titleProperty().bind(wordLabel.textProperty());
         showImage();       
     }

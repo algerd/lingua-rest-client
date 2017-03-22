@@ -35,14 +35,17 @@
                                         <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="25.0" vgrow="SOMETIMES" />
                                         <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="25.0" />
                                         <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="25.0" />
+                                        <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="25.0" />
                                     </rowConstraints>
                                     <children>
                                        <Label text="Word:" />
                                        <Label text="Transcription:" GridPane.rowIndex="1" />
-                                       <Label text="Translation:" GridPane.rowIndex="2" />  
+                                       <Label text="Translation:" GridPane.rowIndex="2" /> 
+                                       <Label text="Created:" GridPane.rowIndex="3" />  
                                        <Label fx:id="wordLabel" text="Label" GridPane.columnIndex="1" />
                                        <Label fx:id="transcriptionLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                                        <Label fx:id="translationLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                                       <Label fx:id="createdLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                                     </children>
                                 </GridPane>
                             </children>
