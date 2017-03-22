@@ -1,4 +1,4 @@
-package ru.javafx.lingua.rest.client.entity;
+package ru.javafx.lingua.rest.client.core.dateutils;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
@@ -10,7 +10,7 @@ import java.time.format.DateTimeFormatter;
 import org.springframework.stereotype.Component;
 
 @Component
-public class JsonDateDeserializer extends JsonDeserializer<LocalDateTime> {
+public class LocalDateTimeDeserializer extends JsonDeserializer<LocalDateTime> {
 
     @Override
     public LocalDateTime deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {

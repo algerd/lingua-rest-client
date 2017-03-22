@@ -1,6 +1,7 @@
 
 package ru.javafx.lingua.rest.client.entity;
 
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import ru.javafx.lingua.rest.client.core.Entity;
 import ru.javafx.lingua.rest.client.core.datacore.RelPath;
@@ -53,7 +54,7 @@ public class Word implements Entity {
         return created;
     }
     
-    @JsonDeserialize(using = JsonDateDeserializer.class)
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     public void setCreated(LocalDateTime created) {
         this.created = created;
     }
