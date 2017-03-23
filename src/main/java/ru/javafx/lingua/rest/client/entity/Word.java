@@ -78,7 +78,7 @@ public class Word implements Entity {
     @Override
     public int hashCode() {
         int hash = 5;
-        hash = 37 * hash + Objects.hashCode(this.word);
+        hash = 37 * hash + Objects.hashCode(getWord());
         return hash;
     }
 
@@ -94,12 +94,12 @@ public class Word implements Entity {
             return false;
         }
         final Word other = (Word) obj;
-        return Objects.equals(this.word, other.word);
+        return Objects.equals(getWord(), other.getWord());
     }
 
     @Override
     public String toString() {
-        return "Word{" + "word=" + word + ", transcription=" + transcription + ", translation=" + translation + ", created=" + getCreated() + '}';
+        return "Word{" + "word=" + getWord() + ", transcription=" + getTranscription() + ", translation=" + getTranslation() + ", created=" + getCreated() + '}';
     }  
    
 }
