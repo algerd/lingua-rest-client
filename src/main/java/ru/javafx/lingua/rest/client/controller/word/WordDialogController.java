@@ -3,6 +3,7 @@ package ru.javafx.lingua.rest.client.controller.word;
 
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.time.LocalDateTime;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
@@ -56,6 +57,7 @@ public class WordDialogController extends BaseDialogController<Word> {
             word.setWord(wordTextField.getText().trim());
             word.setTranscription(transcriptionTextField.getText().trim());
             word.setTranslation(translationTextField.getText().trim());
+            //word.setCreated(LocalDateTime.now());
             try { 
                 resource = edit ? wordRepository.update(resource) : wordRepository.saveAndGetResource(word);
                 //logger.info("Saved Artist Resource: {}", resource);                

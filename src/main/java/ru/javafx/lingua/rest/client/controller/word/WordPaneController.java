@@ -56,7 +56,7 @@ public class WordPaneController extends EntityController<Word> {
         wordLabel.textProperty().bind(resource.getContent().wordProperty());                                 
         transcriptionLabel.textProperty().bind(resource.getContent().transcriptionProperty());
         translationLabel.textProperty().bind(resource.getContent().translationProperty());
-        createdLabel.setText(resource.getContent().getCreated().toString());
+        createdLabel.textProperty().bind(resource.getContent().createdProperty().asString());
         titleProperty().bind(wordLabel.textProperty());
         showImage();       
     }

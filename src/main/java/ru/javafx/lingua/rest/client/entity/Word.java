@@ -8,6 +8,8 @@ import ru.javafx.lingua.rest.client.core.datacore.RelPath;
 import java.util.Objects;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import java.time.LocalDateTime;
 
 @RelPath("words")
@@ -16,7 +18,7 @@ public class Word implements Entity {
     private final StringProperty word = new SimpleStringProperty("");
     private final StringProperty transcription = new SimpleStringProperty("");
     private final StringProperty translation = new SimpleStringProperty("");
-    private LocalDateTime created = LocalDateTime.now();
+    private final ObjectProperty<LocalDateTime> created = new SimpleObjectProperty<>(LocalDateTime.now());
     
     public Word() {}
        
@@ -51,12 +53,16 @@ public class Word implements Entity {
     }
 
     public LocalDateTime getCreated() {
-        return created;
+        return created.get();
     }
     
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
-    public void setCreated(LocalDateTime created) {
-        this.created = created;
+    public void setCreated(LocalDateTime value) {
+        created.setValue(value);
+    }
+    
+    public ObjectProperty<LocalDateTime> createdProperty() {
+        return created;
     }
     
     @Override
@@ -65,7 +71,7 @@ public class Word implements Entity {
         w.setWord(getWord());
         w.setTranscription(getTranscription());
         w.setTranslation(getTranslation());      
-        w.setCreated(created);
+        w.setCreated(getCreated());
         return w;
     }
 
@@ -93,7 +99,7 @@ public class Word implements Entity {
 
     @Override
     public String toString() {
-        return "Word{" + "word=" + word + ", transcription=" + transcription + ", translation=" + translation + ", created=" + created + '}';
+        return "Word{" + "word=" + word + ", transcription=" + transcription + ", translation=" + translation + ", created=" + getCreated() + '}';
     }  
    
 }
