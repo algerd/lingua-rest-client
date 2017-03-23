@@ -2,7 +2,7 @@
 package ru.javafx.lingua.rest.client.core.datacore.impl;
 
 import ru.javafx.lingua.rest.client.core.datacore.SessionManager;
-import ru.javafx.lingua.rest.client.core.properties.AuthorizationProperties;
+import ru.javafx.lingua.rest.client.authorization.AuthorizationProperties;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -11,10 +11,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.annotation.PropertySources;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
+import static ru.javafx.lingua.rest.client.authorization.AuthorizationProperties.AUTHORIZATION_PROPERTY_SOURCE;
 
 @Component
+@PropertySources({
+	@PropertySource(value = AUTHORIZATION_PROPERTY_SOURCE, ignoreResourceNotFound = false)
+})
 public class SessionManagerImpl implements SessionManager {
     
     @Autowired
