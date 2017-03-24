@@ -5,6 +5,7 @@ import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.scene.layout.AnchorPane;
 import org.springframework.beans.factory.annotation.Autowired;
+import ru.javafx.lingua.rest.client.controller.users.UsersController;
 import ru.javafx.lingua.rest.client.controller.words.WordsController;
 import ru.javafx.lingua.rest.client.core.gui.MainController;
 import ru.javafx.lingua.rest.client.core.gui.service.RequestViewService;
@@ -31,6 +32,11 @@ public class TopBarController extends BaseFxmlController {
     @FXML
     private void showWords() {
         requestViewService.show(WordsController.class);
+    }
+    
+    @FXML
+    private void showUsers() {
+        requestViewService.show(UsersController.class);
     }
      
 }

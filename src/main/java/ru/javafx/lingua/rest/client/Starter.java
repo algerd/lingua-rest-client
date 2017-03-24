@@ -4,6 +4,7 @@ import ru.javafx.lingua.rest.client.authorization.UpdateAuthorizationProperties;
 import javafx.scene.image.Image;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import ru.javafx.lingua.rest.client.authorization.AuthorizationController;
 import ru.javafx.lingua.rest.client.controller.MainControllerImpl;
 import ru.javafx.lingua.rest.client.core.gui.service.RequestViewService;
 import ru.javafx.lingua.rest.client.fxintegrity.BaseSpringBootJavaFxApplication;
@@ -32,6 +33,7 @@ public class Starter extends BaseSpringBootJavaFxApplication {
         */
         
         //requestViewService.show(WordsController.class);
+        requestViewService.show(AuthorizationController.class);
         primaryStage.getIcons().add(new Image("images/icon_root_layout.png"));     
     }
 	

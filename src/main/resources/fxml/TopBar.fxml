@@ -11,6 +11,7 @@
         <HBox spacing="5.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <children>
                 <Button mnemonicParsing="false" onAction="#showWords" text="Words" />
+                <Button mnemonicParsing="false" onAction="#showUsers" text="Users" />
             </children>
             <opaqueInsets>
                 <Insets />

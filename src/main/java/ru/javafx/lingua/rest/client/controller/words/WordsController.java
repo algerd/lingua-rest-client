@@ -14,9 +14,6 @@ import org.springframework.hateoas.Resource;
 import ru.javafx.lingua.rest.client.controller.word.WordPaneController;
 import ru.javafx.lingua.rest.client.core.datacore.operators.StringOperator;
 import ru.javafx.lingua.rest.client.core.gui.paginator.PagedTableController;
-import ru.javafx.lingua.rest.client.core.gui.paginator.Sort;
-import ru.javafx.lingua.rest.client.core.gui.paginator.Sort.Direction;
-import ru.javafx.lingua.rest.client.core.gui.paginator.Sort.Order;
 import static ru.javafx.lingua.rest.client.core.gui.service.ContextMenuItemType.ADD_WORD;
 import static ru.javafx.lingua.rest.client.core.gui.service.ContextMenuItemType.DELETE_WORD;
 import static ru.javafx.lingua.rest.client.core.gui.service.ContextMenuItemType.EDIT_WORD;
@@ -29,10 +26,7 @@ import ru.javafx.lingua.rest.client.repository.WordRepository;
     title = "Words")
 public class WordsController extends PagedTableController<Word> {
 
-    private Resource<Word> resorce;
     private String searchString = "";
-    private String sort;
-    private String order;
     
     @Autowired
     private WordRepository wordRepository;
@@ -56,7 +50,7 @@ public class WordsController extends PagedTableController<Word> {
         initRepositoryListeners();   
     }
     
-     @Override
+    @Override
     protected void initPagedTable() {     
         wordColumn.setCellValueFactory(cellData -> cellData.getValue().getContent().wordProperty());  
         transcriptionColumn.setCellValueFactory(cellData -> cellData.getValue().getContent().transcriptionProperty());
@@ -74,14 +68,6 @@ public class WordsController extends PagedTableController<Word> {
         String paramStr = params.isEmpty()? "" : String.join("&", params);
         logger.info("paramStr :{}", paramStr);
         return paramStr;
-    }
-    
-    @Override
-    protected Sort getSort() {
-        return new Sort(new Order(
-           order.equals("Asc") ? Direction.ASC : Direction.DESC,
-           sort.toLowerCase()
-        ));
     }
     
     private void initRepositoryListeners() {

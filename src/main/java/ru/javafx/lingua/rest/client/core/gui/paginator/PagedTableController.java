@@ -19,11 +19,14 @@ import ru.javafx.lingua.rest.client.fxintegrity.FXMLControllerLoader;
 public abstract class PagedTableController<T extends Entity> extends BaseAwareController {
     
     protected Resource<T> selectedItem;
+    protected Resource<T> resorce;
     protected PagedResources<Resource<T>> resources; 
     protected PaginatorPaneController paginatorPaneController;
     protected CrudRepository<T> pagedTableRepository;
     protected int pagedTableSize = 5;
     protected int pagedTableHeaderSize = 1;
+    protected String sort;
+    protected String order = "Asc";
     
     @Autowired
     protected FXMLControllerLoader fxmlLoader;
@@ -35,7 +38,13 @@ public abstract class PagedTableController<T extends Entity> extends BaseAwareCo
     
     protected abstract String createParamString();
     protected abstract void initPagedTable();
-    protected abstract Sort getSort();
+
+    protected Sort getSort() {
+        return new Sort(new Sort.Order(
+           order.toLowerCase().equals("asc") ? Sort.Direction.ASC : Sort.Direction.DESC,
+           sort.toLowerCase()
+        ));
+    }
     
     public void initPagedTableController(CrudRepository<T> pagedTableRepository) {
         this.pagedTableRepository = pagedTableRepository;
