@@ -42,6 +42,13 @@ public class Starter extends BaseSpringBootJavaFxApplication {
         } else {
             requestViewService.showTab(WordsController.class);
         }
+        
+        /*
+        Разделить регистрацию и авторизацию.
+        При первом входе или неправильном входе - попросить авторизироваться. И там же ссылка на регистрацию.
+        Регистрация - это создание аккаунта с вводом дополнительных полей. После успешной регистрации - автоматический вход.
+        */
+        
         primaryStage.getIcons().add(new Image("images/icon_root_layout.png"));     
     }
 	

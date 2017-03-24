@@ -26,7 +26,7 @@ public class SessionManagerImpl implements SessionManager {
     @Autowired
     private AuthorizationProperties authorizationProperties;
     
-    private final Logger logger = LoggerFactory.getLogger(this.getClass()); 
+    private final Logger logger = LoggerFactory.getLogger(getClass()); 
     private String sessionId;
     private boolean expired = true;
     private long lastAccessedTime;
@@ -55,14 +55,15 @@ public class SessionManagerImpl implements SessionManager {
         return "JSESSIONID=" + getSessionId();
     }
     
-    private void authorize() {    
-        String authorStr = authorizationProperties.getUsername() + ":" + authorizationProperties.getPassword();
+    private void authorize() {            
         try {			                      
 			URL url = new URL(authorizationProperties.getUrl());
 			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             
+            String authorStr = authorizationProperties.getUsername() + ":" + authorizationProperties.getPassword();
             String encoding = Base64.getEncoder().encodeToString(authorStr.getBytes("utf-8"));
-			connection.setRequestProperty(HttpHeaders.AUTHORIZATION, "Basic " + encoding);                     
+			connection.setRequestProperty(HttpHeaders.AUTHORIZATION, "Basic " + encoding); 
+            
             String setCookie = connection.getHeaderField(HttpHeaders.SET_COOKIE);
             if (connection.getResponseCode() != 200 || setCookie == null) {
                 logger.debug("Response Code {}", connection.getResponseCode());

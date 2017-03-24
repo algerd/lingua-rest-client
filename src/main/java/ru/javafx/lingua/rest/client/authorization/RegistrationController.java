@@ -4,28 +4,29 @@ package ru.javafx.lingua.rest.client.authorization;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
-import javafx.scene.control.TextField;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
 import org.springframework.beans.factory.annotation.Autowired;
-import ru.javafx.lingua.rest.client.core.gui.service.RequestViewService;
 import ru.javafx.lingua.rest.client.fxintegrity.BaseFxmlController;
 import ru.javafx.lingua.rest.client.fxintegrity.FXMLController;
 import ru.javafx.lingua.rest.client.repository.UserRepository;
 
 @FXMLController(
-    value = "/fxml/authorization/Authorization.fxml",    
-    title = "Authorization")
-public class AuthorizationController extends BaseFxmlController {
+    value = "/fxml/authorization/Registration.fxml",    
+    title = "Registration")
+public class RegistrationController extends BaseFxmlController {
     
     @Autowired
     private UserRepository userRepository;
-    @Autowired
-    private RequestViewService requestViewService;
     
     @FXML
     private TextField usernameTextField;
     @FXML
-    private TextField passwordTextField;
+    private TextField mailTextField;
+    @FXML
+    private TextField passwordTextField1;
+    @FXML
+    private TextField passwordTextField2;
     @FXML
     private Button okButton;
     
@@ -34,11 +35,7 @@ public class AuthorizationController extends BaseFxmlController {
     public void initialize(URL location, ResourceBundle resources) {
         
     }
-    
-    @FXML 
-    private void onLinkRegistration() {
-        requestViewService.showPane(RegistrationController.class);
-    }
+
     
     @FXML
     private void handleOkButton() {
