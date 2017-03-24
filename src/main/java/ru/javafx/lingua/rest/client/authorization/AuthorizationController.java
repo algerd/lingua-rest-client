@@ -7,6 +7,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Button;
 import org.springframework.beans.factory.annotation.Autowired;
+import ru.javafx.lingua.rest.client.controller.words.WordsController;
 import ru.javafx.lingua.rest.client.core.gui.service.RequestViewService;
 import ru.javafx.lingua.rest.client.fxintegrity.BaseFxmlController;
 import ru.javafx.lingua.rest.client.fxintegrity.FXMLController;
@@ -18,9 +19,11 @@ import ru.javafx.lingua.rest.client.repository.UserRepository;
 public class AuthorizationController extends BaseFxmlController {
     
     @Autowired
-    private UserRepository userRepository;
-    @Autowired
     private RequestViewService requestViewService;
+    @Autowired
+    private AuthorizationChecker authorizationChecker;
+    @Autowired
+    private AuthorizationProperties authorizationProperties;
     
     @FXML
     private TextField usernameTextField;
@@ -42,7 +45,14 @@ public class AuthorizationController extends BaseFxmlController {
     
     @FXML
     private void handleOkButton() {
-        
+        authorizationProperties.setUsername(usernameTextField.getText());
+        authorizationProperties.setPassword(passwordTextField.getText());
+        if (!authorizationChecker.check()) {
+            requestViewService.showPane(AuthorizationController.class);
+        } else {
+            authorizationProperties.updatePropertiesFile();
+            requestViewService.showTab(WordsController.class);
+        }
     }
 
 }

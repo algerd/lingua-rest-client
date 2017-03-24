@@ -52,7 +52,7 @@ public class AuthorizationProperties {
             properties.setProperty("authorization.password", getPassword());
             properties.setProperty("authorization.url", getUrl());
             properties.save();
-            logger.info("config.properties updated Successfully!!");
+            //logger.info("config.properties updated Successfully!!");
         } catch (ConfigurationException e) {
             System.out.println(e.getMessage());
         }
