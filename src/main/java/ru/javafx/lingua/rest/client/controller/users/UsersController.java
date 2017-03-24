@@ -88,7 +88,7 @@ public class UsersController extends PagedTableController<User> {
             }
             // если лкм выбрана запись - показать её
             if (selectedItem != null) {
-                requestViewService.show(UserPaneController.class, selectedItem);
+                requestViewService.showTab(UserPaneController.class, selectedItem);
             }           
         }         
     }

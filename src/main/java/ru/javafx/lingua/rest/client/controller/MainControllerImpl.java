@@ -9,6 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import javafx.fxml.FXML;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import javafx.scene.layout.Pane;
+import javafx.scene.Parent;
+import javafx.scene.control.SplitPane;
 
 @FXMLController(
     value = "/fxml/Main.fxml",
@@ -22,7 +25,10 @@ public class MainControllerImpl extends BaseFxmlController implements MainContro
     private LeftBarController leftBarController;
          
     @FXML
-    private TabPane tabPane;
+    //private Pane pane;
+    private SplitPane splitPane;
+    
+    private TabPane tabPane = new TabPane();
    
     @Override
     public void initialize(URL location, ResourceBundle resources) {        
@@ -30,13 +36,29 @@ public class MainControllerImpl extends BaseFxmlController implements MainContro
     }
     
     @Override
-    public void show(BaseFxmlController controller) {      
+    public void showTab(BaseFxmlController controller) { 
+        if (!splitPane.getItems().contains(tabPane)) {
+            addItem(tabPane);
+        }       
         Tab tab = new Tab();
         tab.setClosable(true); 
         tab.textProperty().bind(controller.titleProperty());
         tab.setContent(controller.getView()); 
         tabPane.getTabs().add(tab); 
         tabPane.getSelectionModel().selectLast();       
+    }
+    
+    @Override
+    public void showPane(BaseFxmlController controller) {
+       addItem(controller.getView());
+    }
+    
+    private void addItem(Parent view) {
+        if (splitPane.getItems().size() > 1) {
+            splitPane.getItems().set(1, view);
+        } else {
+           splitPane.getItems().add(view); 
+        }
     }
             
 }

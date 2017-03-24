@@ -31,12 +31,12 @@ public class TopBarController extends BaseFxmlController {
     
     @FXML
     private void showWords() {
-        requestViewService.show(WordsController.class);
+        requestViewService.showTab(WordsController.class);
     }
     
     @FXML
     private void showUsers() {
-        requestViewService.show(UsersController.class);
+        requestViewService.showTab(UsersController.class);
     }
      
 }

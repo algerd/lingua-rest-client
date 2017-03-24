@@ -5,6 +5,8 @@ import ru.javafx.lingua.rest.client.fxintegrity.BaseFxmlController;
 
 public interface MainController {
     
-    void show(BaseFxmlController controller);
+    void showTab(BaseFxmlController controller);
+    
+    void showPane(BaseFxmlController controller);
     
 }

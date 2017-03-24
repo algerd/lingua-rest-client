@@ -93,7 +93,7 @@ public class WordsController extends PagedTableController<Word> {
             }
             // если лкм выбрана запись - показать её
             if (selectedItem != null) {
-                requestViewService.show(WordPaneController.class, selectedItem);
+                requestViewService.showTab(WordPaneController.class, selectedItem);
             }           
         }      
         else if (mouseEvent.getButton() == MouseButton.SECONDARY) { 

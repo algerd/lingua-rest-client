@@ -32,14 +32,25 @@ public class RequestViewService {
     @Autowired
     private ApplicationContext applicationContext;
    
-    public void show(Class<? extends BaseFxmlController> controllerClass) {
-        mainController.show(fxmlLoader.load(controllerClass));        
+    public void showPane(Class<? extends BaseFxmlController> controllerClass) {
+        mainController.showPane(fxmlLoader.load(controllerClass));        
     }
     
-    public void show(Class<? extends EntityController> controllerClass, Resource<? extends Entity> resource) {
+    public void showPane(Class<? extends EntityController> controllerClass, Resource<? extends Entity> resource) {
         EntityController controller = (EntityController) fxmlLoader.load(controllerClass);
         controller.setResource(resource);
-        mainController.show(controller);
+        mainController.showPane(controller);
+        controller.show();
+    }
+    
+    public void showTab(Class<? extends BaseFxmlController> controllerClass) {
+        mainController.showTab(fxmlLoader.load(controllerClass));        
+    }
+    
+    public void showTab(Class<? extends EntityController> controllerClass, Resource<? extends Entity> resource) {
+        EntityController controller = (EntityController) fxmlLoader.load(controllerClass);
+        controller.setResource(resource);
+        mainController.showTab(controller);
         controller.show();
     }
     
