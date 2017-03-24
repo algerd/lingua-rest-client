@@ -4,8 +4,10 @@ import ru.javafx.lingua.rest.client.authorization.UpdateAuthorizationProperties;
 import javafx.scene.image.Image;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import ru.javafx.lingua.rest.client.authorization.AuthorizationChecker;
 import ru.javafx.lingua.rest.client.authorization.AuthorizationController;
 import ru.javafx.lingua.rest.client.controller.MainControllerImpl;
+import ru.javafx.lingua.rest.client.controller.words.WordsController;
 import ru.javafx.lingua.rest.client.core.gui.service.RequestViewService;
 import ru.javafx.lingua.rest.client.fxintegrity.BaseSpringBootJavaFxApplication;
 
@@ -18,6 +20,8 @@ public class Starter extends BaseSpringBootJavaFxApplication {
     
     @Autowired
     private RequestViewService requestViewService;
+    @Autowired
+    private AuthorizationChecker authorizationChecker;
 
     @Override
     public void show() {
@@ -25,7 +29,7 @@ public class Starter extends BaseSpringBootJavaFxApplication {
         /*
         Вызвать контроллер, релизующий функции
             1. проверки наличия AuthorizationProperties username и password
-            2. получить сессию с сервера SessionManagerImpl. authorize() с одновременной проверкой правильности авторизации
+            2. проверка правильности авторизации на сервере
             3. если нет AuthorizationProperties или не проходит авторизация - предложить пройти регистрацию
             4. после правильного заполнения полей регистрации обновить AuthorizationProperties.username и password,
                 вызвать AuthorizationProperties.updatePropertiesFile()
@@ -33,8 +37,11 @@ public class Starter extends BaseSpringBootJavaFxApplication {
         */
         
         //requestViewService.showTab(WordsController.class);
-        requestViewService.showPane(AuthorizationController.class);
-        
+        if (!authorizationChecker.check()) {
+            requestViewService.showPane(AuthorizationController.class);
+        } else {
+            requestViewService.showTab(WordsController.class);
+        }
         primaryStage.getIcons().add(new Image("images/icon_root_layout.png"));     
     }
 	

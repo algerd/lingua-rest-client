@@ -57,5 +57,9 @@ public class AuthorizationProperties {
             System.out.println(e.getMessage());
         }
     }
+    
+    public boolean isUsernameAndPassword() {
+        return username != null && !username.equals("") && password != null && !password.equals("");
+    }
 
 }
