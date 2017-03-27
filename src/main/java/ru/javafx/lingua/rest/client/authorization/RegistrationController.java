@@ -12,7 +12,7 @@ import javafx.scene.control.TextField;
 import javax.xml.ws.http.HTTPException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
-import static org.springframework.http.HttpStatus.OK;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 import ru.javafx.lingua.rest.client.controller.words.WordsController;
@@ -67,21 +67,20 @@ public class RegistrationController extends BaseFxmlController {
             ResponseEntity<RegistrationResponseType> response = restTemplate.postForEntity(uri, new HttpEntity<>(user), RegistrationResponseType.class);
             //logger.info("Registration Response Code: {}", response.getStatusCode());
                         
-            if (response.getStatusCode().equals(OK)) {
+            if (response.getStatusCode().equals(HttpStatus.OK)) {
                 RegistrationResponseType responseMsg = response.getBody();
                 //logger.info("Registration Response: {}", responseMsg);
-                switch (responseMsg) {
-                    case OK : 
-                        authorizationProperties.setUsername(username);
-                        authorizationProperties.setPassword(password);
-                        authorizationProperties.updatePropertiesFile();
-                        requestViewService.showTab(WordsController.class);
-                        return; 
-                    default:
-                        Alert alert = new Alert(Alert.AlertType.WARNING);
-                        alert.setTitle("WARNING");
-                        alert.setContentText(responseMsg.toString());
-                        alert.showAndWait();
+                
+                if (responseMsg.equals(RegistrationResponseType.OK)) { 
+                    authorizationProperties.setUsername(username);
+                    authorizationProperties.setPassword(password);
+                    authorizationProperties.updatePropertiesFile();
+                    requestViewService.showTab(WordsController.class);
+                } else {
+                    Alert alert = new Alert(Alert.AlertType.WARNING);
+                    alert.setTitle("WARNING");
+                    alert.setContentText(responseMsg.toString());
+                    alert.showAndWait();
                 }
             } else {
                 throw new HTTPException(response.getStatusCode().value());
