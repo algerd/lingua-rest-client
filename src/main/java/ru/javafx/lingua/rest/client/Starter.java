@@ -1,6 +1,5 @@
 package ru.javafx.lingua.rest.client;
 
-import ru.javafx.lingua.rest.client.authorization.UpdateAuthorizationProperties;
 import javafx.scene.image.Image;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

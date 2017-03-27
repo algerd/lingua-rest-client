@@ -42,7 +42,7 @@ public class AuthorizationChecker {
             String encoding = Base64.getEncoder().encodeToString(authorStr.getBytes("utf-8"));
 			connection.setRequestProperty(HttpHeaders.AUTHORIZATION, "Basic " + encoding); 
            
-            //logger.info("ResponseCode: {}", connection.getResponseCode());            
+            logger.info("ResponseCode: {}", connection.getResponseCode());            
             switch (connection.getResponseCode()) {
                 case 200:
                     return true;

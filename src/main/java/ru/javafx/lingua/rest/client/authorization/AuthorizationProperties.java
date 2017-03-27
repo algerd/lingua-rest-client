@@ -20,6 +20,7 @@ public class AuthorizationProperties {
     private String username;
     private String password;
     private String url;
+    private String registrationurl;
 
     public String getUsername() {
         return username;
@@ -44,13 +45,22 @@ public class AuthorizationProperties {
     public void setUrl(String url) {
         this.url = url;
     }
+
+    public String getRegistrationurl() {
+        return registrationurl;
+    }
+
+    public void setRegistrationurl(String registrationurl) {
+        this.registrationurl = registrationurl;
+    }
+    
+    
     
     public void updatePropertiesFile() {
         try {          
             PropertiesConfiguration properties = new PropertiesConfiguration(AUTHORIZATION_REL_PATH);
             properties.setProperty("authorization.username", getUsername());
             properties.setProperty("authorization.password", getPassword());
-            properties.setProperty("authorization.url", getUrl());
             properties.save();
             //logger.info("config.properties updated Successfully!!");
         } catch (ConfigurationException e) {

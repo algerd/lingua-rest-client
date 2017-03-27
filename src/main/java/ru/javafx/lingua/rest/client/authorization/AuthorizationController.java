@@ -11,7 +11,6 @@ import ru.javafx.lingua.rest.client.controller.words.WordsController;
 import ru.javafx.lingua.rest.client.core.gui.service.RequestViewService;
 import ru.javafx.lingua.rest.client.fxintegrity.BaseFxmlController;
 import ru.javafx.lingua.rest.client.fxintegrity.FXMLController;
-import ru.javafx.lingua.rest.client.repository.UserRepository;
 
 @FXMLController(
     value = "/fxml/authorization/Authorization.fxml",    
