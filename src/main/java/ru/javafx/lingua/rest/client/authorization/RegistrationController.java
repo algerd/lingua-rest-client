@@ -4,6 +4,9 @@ package ru.javafx.lingua.rest.client.authorization;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -11,6 +14,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javax.xml.ws.http.HTTPException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.json.JsonParser;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +24,9 @@ import ru.javafx.lingua.rest.client.core.gui.service.RequestViewService;
 import ru.javafx.lingua.rest.client.entity.User;
 import ru.javafx.lingua.rest.client.fxintegrity.BaseFxmlController;
 import ru.javafx.lingua.rest.client.fxintegrity.FXMLController;
+import ru.javafx.lingua.rest.client.message.MessageDTO;
 import ru.javafx.lingua.rest.client.repository.UserRepository;
+import org.springframework.boot.json.BasicJsonParser;
 
 @FXMLController(
     value = "/fxml/authorization/Registration.fxml",    
@@ -64,14 +70,21 @@ public class RegistrationController extends BaseFxmlController {
         try { 
             URI uri = new URI(authorizationProperties.getRegistrationurl());        
             RestTemplate restTemplate = new RestTemplate();       
-            ResponseEntity<RegistrationResponseType> response = restTemplate.postForEntity(uri, new HttpEntity<>(user), RegistrationResponseType.class);
-            //logger.info("Registration Response Code: {}", response.getStatusCode());
-                        
-            if (response.getStatusCode().equals(HttpStatus.OK)) {
-                RegistrationResponseType responseMsg = response.getBody();
-                //logger.info("Registration Response: {}", responseMsg);
-                
-                if (responseMsg.equals(RegistrationResponseType.OK)) { 
+            ResponseEntity<String> response = restTemplate.postForEntity(uri, new HttpEntity<>(user), String.class);
+                                  
+            logger.info("Registration ResponseCode: {}", response.getStatusCode());                 
+            if (response.getStatusCode().equals(HttpStatus.OK)) {            
+                logger.info("Registration ResponseBody: {}", response.getBody());
+
+                JsonParser jsonParser = new BasicJsonParser();           
+                List<Object> list = jsonParser.parseList(response.getBody());
+                List<MessageDTO> messages = new ArrayList<>();
+                for (Object object : list) {
+                    Map<String, String> obj = (Map<String, String>) object;
+                    messages.add(new MessageDTO(obj.get("type"), obj.get("message")));
+                }
+                                                               
+                if (messages.isEmpty()) { 
                     authorizationProperties.setUsername(username);
                     authorizationProperties.setPassword(password);
                     authorizationProperties.updatePropertiesFile();
@@ -79,12 +92,13 @@ public class RegistrationController extends BaseFxmlController {
                 } else {
                     Alert alert = new Alert(Alert.AlertType.WARNING);
                     alert.setTitle("WARNING");
-                    alert.setContentText(responseMsg.toString());
+                    alert.setContentText(messages.toString());
                     alert.showAndWait();
                 }
             } else {
                 throw new HTTPException(response.getStatusCode().value());
             }
+            
         }  
         catch (URISyntaxException | HTTPException ex) {
             logger.error(ex.getMessage());
