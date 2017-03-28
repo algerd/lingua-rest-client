@@ -11,6 +11,7 @@ import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javax.xml.ws.http.HTTPException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +26,6 @@ import ru.javafx.lingua.rest.client.entity.User;
 import ru.javafx.lingua.rest.client.fxintegrity.BaseFxmlController;
 import ru.javafx.lingua.rest.client.fxintegrity.FXMLController;
 import ru.javafx.lingua.rest.client.message.MessageDTO;
-import ru.javafx.lingua.rest.client.repository.UserRepository;
 import org.springframework.boot.json.BasicJsonParser;
 
 @FXMLController(
@@ -33,8 +33,6 @@ import org.springframework.boot.json.BasicJsonParser;
     title = "Registration")
 public class RegistrationController extends BaseFxmlController {
     
-    @Autowired
-    private UserRepository userRepository;
     @Autowired
     private AuthorizationProperties authorizationProperties;
     @Autowired
@@ -49,29 +47,58 @@ public class RegistrationController extends BaseFxmlController {
     @FXML
     private TextField passwordTextField2;
     @FXML
+    private Label loginErrorLabel;
+    @FXML
+    private Label mailErrorLabel;
+    @FXML
+    private Label password1ErrorLabel;
+    @FXML
+    private Label password2ErrorLabel; 
+    @FXML
     private Button okButton;
     
-
     @Override
     public void initialize(URL location, ResourceBundle resources) {     
     }
   
     @FXML
     private void handleOkButton() {
+        clearErrorLabels();
+        
         String username = usernameTextField.getText().trim();
         String mail = mailTextField.getText().trim();
-        String password = passwordTextField1.getText().trim();
+        String password1 = passwordTextField1.getText().trim();
+        String password2 = passwordTextField2.getText().trim();
         
         User user = new User();
         user.setUsername(username);
-        user.setPassword(password);
+        user.setPassword(password1);
         //user.setMail(mail);
         
+        if (!password1.equals(password2)) {
+            password2ErrorLabel.setText("Repeat Password!");
+        } else {
+            registr(user);
+        }
+    }
+    
+    private void clearErrorLabels() {
+        loginErrorLabel.setText("");
+        mailErrorLabel.setText("");
+        password1ErrorLabel.setText("");
+        password2ErrorLabel.setText("");
+    }
+    
+    private boolean validateInput() {
+        return true;
+    }
+    
+    private void registr(User user) {
         try { 
             URI uri = new URI(authorizationProperties.getRegistrationurl());        
             RestTemplate restTemplate = new RestTemplate();       
             ResponseEntity<String> response = restTemplate.postForEntity(uri, new HttpEntity<>(user), String.class);
-                                  
+
             logger.info("Registration ResponseCode: {}", response.getStatusCode());                 
             if (response.getStatusCode().equals(HttpStatus.OK)) {            
                 logger.info("Registration ResponseBody: {}", response.getBody());
@@ -81,29 +108,35 @@ public class RegistrationController extends BaseFxmlController {
                 List<MessageDTO> messages = new ArrayList<>();
                 for (Object object : list) {
                     Map<String, String> obj = (Map<String, String>) object;
-                    messages.add(new MessageDTO(obj.get("type"), obj.get("message")));
+                    messages.add(new MessageDTO(obj.get("type"), obj.get("message"), obj.get("field")));
                 }
-                                                               
                 if (messages.isEmpty()) { 
-                    authorizationProperties.setUsername(username);
-                    authorizationProperties.setPassword(password);
+                    authorizationProperties.setUsername(user.getUsername());
+                    authorizationProperties.setPassword(user.getPassword());
+                    //authorizationProperties.setMail(user.getMail());
                     authorizationProperties.updatePropertiesFile();
                     requestViewService.showTab(WordsController.class);
                 } else {
-                    Alert alert = new Alert(Alert.AlertType.WARNING);
-                    alert.setTitle("WARNING");
-                    alert.setContentText(messages.toString());
-                    alert.showAndWait();
+                    messages.stream().forEach(message -> {
+                        if (message.getField().equals("username")) { 
+                            loginErrorLabel.setText(message.getMessage());
+                        }
+                        if (message.getField().equals("mail")) { 
+                            mailErrorLabel.setText(message.getMessage());
+                        }
+                        if (message.getField().equals("password")) { 
+                            password1ErrorLabel.setText(message.getMessage());
+                        }                     
+                    });
                 }
             } else {
                 throw new HTTPException(response.getStatusCode().value());
             }
-            
         }  
         catch (URISyntaxException | HTTPException ex) {
             logger.error(ex.getMessage());
         }
-        
     }
+     
 
 }

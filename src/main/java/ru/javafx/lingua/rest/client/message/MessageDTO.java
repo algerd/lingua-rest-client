@@ -2,38 +2,48 @@ package ru.javafx.lingua.rest.client.message;
 
 public class MessageDTO {
     
+    private String field;
     private String message;
     private String type;
-
+  
     public MessageDTO() {
       super();
     }
 
-    public MessageDTO(String type, String message) {
-      super();
-      this.message = message;
-      this.type = type;
+    public MessageDTO(String type, String message, String field) {
+        super();
+        this.message = message;
+        this.type = type;
+        this.field = field;
     }
 
     public String getMessage() {
-      return message;
+        return message;
     }
 
     public void setMessage(String message) {
-      this.message = message;
+        this.message = message;
     }
 
     public String getType() {
-      return type;
+        return type;
     }
 
     public void setType(String type) {
-      this.type = type;
+        this.type = type;
+    }
+
+    public String getField() {
+        return field;
+    }
+
+    public void setField(String field) {
+        this.field = field;
     }
 
     @Override
     public String toString() {
-        return "MessageDTO{" + "message=" + message + ", type=" + type + '}';
+        return "MessageDTO{" + "field=" + field + ", message=" + message + ", type=" + type + '}';
     }
-      
+          
 }

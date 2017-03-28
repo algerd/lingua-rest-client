@@ -11,9 +11,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
-<AnchorPane id="AnchorPane" fx:id="view" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" 
-            fx:controller="ru.javafx.lingua.rest.client.authorization.RegistrationController">
+<AnchorPane id="AnchorPane" fx:id="view" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.javafx.lingua.rest.client.authorization.RegistrationController">
    <children>
       <VBox layoutX="147.0" layoutY="57.0" prefHeight="200.0" prefWidth="100.0" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
@@ -25,7 +23,8 @@
             <GridPane>
               <columnConstraints>
                 <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="100.0" />
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="300.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="200.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" />
               </columnConstraints>
               <rowConstraints>
                 <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -42,6 +41,26 @@
                   <TextField fx:id="mailTextField" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                   <TextField fx:id="passwordTextField1" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                   <TextField fx:id="passwordTextField2" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                  <Label fx:id="loginErrorLabel" textFill="#ed0707" GridPane.columnIndex="2">
+                     <padding>
+                        <Insets left="10.0" />
+                     </padding>
+                  </Label>
+                  <Label fx:id="mailErrorLabel" textFill="#ed0707" GridPane.columnIndex="2" GridPane.rowIndex="1">
+                     <padding>
+                        <Insets left="10.0" />
+                     </padding>
+                  </Label>
+                  <Label fx:id="password1ErrorLabel" textFill="#ed0707" GridPane.columnIndex="2" GridPane.rowIndex="2">
+                     <padding>
+                        <Insets left="10.0" />
+                     </padding>
+                  </Label>
+                  <Label fx:id="password2ErrorLabel" textFill="#ed0707" GridPane.columnIndex="2" GridPane.rowIndex="3">
+                     <padding>
+                        <Insets left="10.0" />
+                     </padding>
+                  </Label>
                </children>
             </GridPane>
             <Button fx:id="okButton" mnemonicParsing="false" onAction="#handleOkButton" prefWidth="50.0" text="OK" />
