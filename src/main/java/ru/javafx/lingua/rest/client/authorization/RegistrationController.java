@@ -54,8 +54,6 @@ public class RegistrationController extends BaseFxmlController {
     private Label password1ErrorLabel;
     @FXML
     private Label password2ErrorLabel; 
-    @FXML
-    private Button okButton;
     
     @Override
     public void initialize(URL location, ResourceBundle resources) {     
@@ -64,20 +62,12 @@ public class RegistrationController extends BaseFxmlController {
     @FXML
     private void handleOkButton() {
         clearErrorLabels();
-        
-        String username = usernameTextField.getText().trim();
-        String mail = mailTextField.getText().trim();
-        String password1 = passwordTextField1.getText().trim();
-        String password2 = passwordTextField2.getText().trim();
-        
-        User user = new User();
-        user.setUsername(username);
-        user.setPassword(password1);
-        //user.setMail(mail);
-        
-        if (!password1.equals(password2)) {
-            password2ErrorLabel.setText("Repeat Password!");
-        } else {
+  
+        if (isValidInput()) {
+            User user = new User();
+            user.setUsername(usernameTextField.getText().trim());
+            user.setPassword(passwordTextField1.getText().trim());
+            //user.setMail(mailTextField.getText().trim());   
             registr(user);
         }
     }
@@ -89,8 +79,29 @@ public class RegistrationController extends BaseFxmlController {
         password2ErrorLabel.setText("");
     }
     
-    private boolean validateInput() {
-        return true;
+    private boolean isValidInput() {
+        boolean isValid = true;
+        if (!passwordTextField1.getText().trim().equals(passwordTextField2.getText().trim())) {
+            password2ErrorLabel.setText("Repeat Password!");
+            isValid = false;
+        }
+        if (usernameTextField.getText().trim().equals("")) {
+            loginErrorLabel.setText("Input username!");
+            isValid = false;
+        }
+        if (mailTextField.getText().trim().equals("")) {
+            mailErrorLabel.setText("Input mail!");
+            isValid = false;
+        }
+        if (passwordTextField1.getText().trim().equals("")) {
+            password1ErrorLabel.setText("Input password1!");
+            isValid = false;
+        }
+        if (passwordTextField2.getText().trim().equals("")) {
+            password2ErrorLabel.setText("Input password2!");
+            isValid = false;
+        }
+        return isValid;
     }
     
     private void registr(User user) {
