@@ -9,8 +9,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javax.xml.ws.http.HTTPException;
@@ -109,18 +107,11 @@ public class RegistrationController extends BaseFxmlController {
             URI uri = new URI(authorizationProperties.getRegistrationurl());        
             RestTemplate restTemplate = new RestTemplate();       
             ResponseEntity<String> response = restTemplate.postForEntity(uri, new HttpEntity<>(user), String.class);
-
-            logger.info("Registration ResponseCode: {}", response.getStatusCode());                 
+            logger.info("Registration ResponseCode: {}", response.getStatusCode());
+            
             if (response.getStatusCode().equals(HttpStatus.OK)) {            
-                logger.info("Registration ResponseBody: {}", response.getBody());
-
-                JsonParser jsonParser = new BasicJsonParser();           
-                List<Object> list = jsonParser.parseList(response.getBody());
-                List<MessageDTO> messages = new ArrayList<>();
-                for (Object object : list) {
-                    Map<String, String> obj = (Map<String, String>) object;
-                    messages.add(new MessageDTO(obj.get("type"), obj.get("message"), obj.get("field")));
-                }
+                //logger.info("Registration ResponseBody: {}", response.getBody());          
+                List<MessageDTO> messages = parseJsonResponse(response);
                 if (messages.isEmpty()) { 
                     authorizationProperties.setUsername(user.getUsername());
                     authorizationProperties.setPassword(user.getPassword());
@@ -128,17 +119,7 @@ public class RegistrationController extends BaseFxmlController {
                     authorizationProperties.updatePropertiesFile();
                     requestViewService.showTab(WordsController.class);
                 } else {
-                    messages.stream().forEach(message -> {
-                        if (message.getField().equals("username")) { 
-                            loginErrorLabel.setText(message.getMessage());
-                        }
-                        if (message.getField().equals("mail")) { 
-                            mailErrorLabel.setText(message.getMessage());
-                        }
-                        if (message.getField().equals("password")) { 
-                            password1ErrorLabel.setText(message.getMessage());
-                        }                     
-                    });
+                    messages.stream().forEach(this::validateFields);
                 }
             } else {
                 throw new HTTPException(response.getStatusCode().value());
@@ -148,6 +129,28 @@ public class RegistrationController extends BaseFxmlController {
             logger.error(ex.getMessage());
         }
     }
+    
+    private List<MessageDTO> parseJsonResponse(ResponseEntity<String> response) {
+        JsonParser jsonParser = new BasicJsonParser();           
+        List<Object> list = jsonParser.parseList(response.getBody());
+        List<MessageDTO> messages = new ArrayList<>();
+        for (Object object : list) {
+            Map<String, String> obj = (Map<String, String>) object;
+            messages.add(new MessageDTO(obj.get("type"), obj.get("message"), obj.get("field")));
+        }
+        return messages;
+    }
+    
+    private void validateFields(MessageDTO message) {
+        if (message.getField().equals("username")) { 
+            loginErrorLabel.setText(message.getMessage());
+        }
+        if (message.getField().equals("mail")) { 
+            mailErrorLabel.setText(message.getMessage());
+        }
+        if (message.getField().equals("password")) { 
+            password1ErrorLabel.setText(message.getMessage());
+        }  
+    }
      
-
 }

@@ -14,18 +14,8 @@ import ru.javafx.lingua.rest.client.core.datacore.RelPath;
 
 @RelPath("users")
 public class User implements Entity {
-    
-    private String password;
-
-    public String getPassword() {
-        return password;
-    }
-    
-    public void setPassword(String value) {
-        password = value;
-    }
-    
-            
+       
+    private String password;        
     private final StringProperty username = new SimpleStringProperty("");
     private final ObjectProperty<LocalDateTime> created = new SimpleObjectProperty<>(LocalDateTime.now());
 
@@ -39,6 +29,14 @@ public class User implements Entity {
     }
     public StringProperty usernameProperty() {
         return username;
+    }
+    
+    public String getPassword() {
+        return password;
+    }
+    
+    public void setPassword(String value) {
+        password = value;
     }
     
     public LocalDateTime getCreated() {
