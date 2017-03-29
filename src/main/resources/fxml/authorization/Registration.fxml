@@ -4,6 +4,7 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
@@ -39,8 +40,8 @@
                   <Label text="Password:" GridPane.rowIndex="3" />
                   <TextField fx:id="usernameTextField" GridPane.columnIndex="1" GridPane.rowIndex="0" />
                   <TextField fx:id="mailTextField" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                  <TextField fx:id="passwordTextField1" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                  <TextField fx:id="passwordTextField2" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                  <PasswordField fx:id="passwordField1" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                  <PasswordField fx:id="passwordField2" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                   <Label fx:id="loginErrorLabel" textFill="#ed0707" GridPane.columnIndex="2">
                      <padding>
                         <Insets left="10.0" />

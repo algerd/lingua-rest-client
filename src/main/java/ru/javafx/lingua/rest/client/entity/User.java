@@ -9,21 +9,23 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javax.validation.constraints.Size;
 import ru.javafx.lingua.rest.client.core.Entity;
 import ru.javafx.lingua.rest.client.core.datacore.RelPath;
 
 @RelPath("users")
 public class User implements Entity {
-       
-    private String password;        
-    private final StringProperty username = new SimpleStringProperty("");
-    private final ObjectProperty<LocalDateTime> created = new SimpleObjectProperty<>(LocalDateTime.now());
 
+    private final StringProperty username = new SimpleStringProperty("");
+    private final StringProperty password = new SimpleStringProperty("");
+    private final ObjectProperty<LocalDateTime> created = new SimpleObjectProperty<>(LocalDateTime.now());     
+           
     public User() {}
     
+    @Size(min = 4, max = 64, message = "error.user.username.size")
     public String getUsername() {
         return username.get();
-    }
+    }   
     public void setUsername(String value) {
         username.set(value);
     }
@@ -31,12 +33,15 @@ public class User implements Entity {
         return username;
     }
     
+    @Size(min = 4, max = 64, message = "error.user.password.size") 
     public String getPassword() {
-        return password;
+        return password.get();
     }
-    
     public void setPassword(String value) {
-        password = value;
+        password.set(value);
+    }
+    public StringProperty passwordProperty() {
+        return password;
     }
     
     public LocalDateTime getCreated() {
