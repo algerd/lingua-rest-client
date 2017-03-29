@@ -15,7 +15,15 @@ import ru.javafx.lingua.rest.client.core.datacore.RelPath;
 
 @RelPath("users")
 public class User implements Entity {
-
+    /*
+    @NotNull(message="Имэйл должен быть задан")
+    @Pattern(regexp = "^(?:[a-zA-Z0-9_'^&/+-])+(?:\\.(?:[a-zA-Z0-9_'^&/+-])+)" +
+        "*@(?:(?:\\[?(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?))\\.)" +
+        "{3}(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\]?)|(?:[a-zA-Z0-9-]+\\.)" +
+        "+(?:[a-zA-Z]){2,}\\.?)$", 
+        message = "заданный имэйл не может существовать")
+    String mail;
+    */
     private final StringProperty username = new SimpleStringProperty("");
     private final StringProperty password = new SimpleStringProperty("");
     private final ObjectProperty<LocalDateTime> created = new SimpleObjectProperty<>(LocalDateTime.now());     
