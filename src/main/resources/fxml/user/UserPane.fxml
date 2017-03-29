@@ -32,17 +32,20 @@
                                         <ColumnConstraints hgrow="SOMETIMES" minWidth="100.0" prefWidth="200.0" />
                                     </columnConstraints>
                                     <rowConstraints>
-                                        <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="25.0" vgrow="SOMETIMES" />
+                                        <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="25.0" />
+                                        <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="25.0" />
                                         <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="25.0" />
                                         <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="25.0" />
                                     </rowConstraints>
                                     <children>
                                        <Label text="Username:" />
                                        <Label text="Role:" GridPane.rowIndex="1" />
-                                       <Label text="Created:" GridPane.rowIndex="2" />  
+                                       <Label text="User:" GridPane.rowIndex="2" />
+                                       <Label text="Created:" GridPane.rowIndex="3" />  
                                        <Label fx:id="usernameLabel" text="Label" GridPane.columnIndex="1" />
                                        <Label fx:id="roleLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                                       <Label fx:id="createdLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                                       <Label fx:id="mailLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                                       <Label fx:id="createdLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                                     </children>
                                 </GridPane>
                             </children>

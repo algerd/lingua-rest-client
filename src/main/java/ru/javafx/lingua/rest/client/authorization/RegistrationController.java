@@ -74,7 +74,7 @@ public class RegistrationController extends BaseFxmlController {
   
         user.setUsername(usernameTextField.getText().trim());
         user.setPassword(passwordField1.getText().trim());
-        //user.setMail(mailTextField.getText().trim());
+        user.setMail(mailTextField.getText().trim());
         
         List<MessageDTO> messages = errorMessageHandler.getErrorMessages(user);
         validateInput(messages);
@@ -109,7 +109,7 @@ public class RegistrationController extends BaseFxmlController {
             URI uri = new URI(authorizationProperties.getRegistrationurl());        
             RestTemplate restTemplate = new RestTemplate();       
             ResponseEntity<String> response = restTemplate.postForEntity(uri, new HttpEntity<>(user), String.class);
-            logger.info("Registration ResponseCode: {}", response.getStatusCode());
+            //logger.info("Registration ResponseCode: {}", response.getStatusCode());
             
             if (response.getStatusCode().equals(HttpStatus.OK)) {            
                 //logger.info("Registration ResponseBody: {}", response.getBody());          
@@ -117,7 +117,7 @@ public class RegistrationController extends BaseFxmlController {
                 if (messages.isEmpty()) { 
                     authorizationProperties.setUsername(user.getUsername());
                     authorizationProperties.setPassword(user.getPassword());
-                    //authorizationProperties.setMail(user.getMail());
+                    authorizationProperties.setMail(user.getMail());
                     authorizationProperties.updatePropertiesFile();
                     requestViewService.showTab(WordsController.class);
                 } else {

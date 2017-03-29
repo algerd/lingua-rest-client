@@ -9,23 +9,17 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import ru.javafx.lingua.rest.client.core.Entity;
 import ru.javafx.lingua.rest.client.core.datacore.RelPath;
 
 @RelPath("users")
 public class User implements Entity {
-    /*
-    @NotNull(message="Имэйл должен быть задан")
-    @Pattern(regexp = "^(?:[a-zA-Z0-9_'^&/+-])+(?:\\.(?:[a-zA-Z0-9_'^&/+-])+)" +
-        "*@(?:(?:\\[?(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?))\\.)" +
-        "{3}(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\]?)|(?:[a-zA-Z0-9-]+\\.)" +
-        "+(?:[a-zA-Z]){2,}\\.?)$", 
-        message = "заданный имэйл не может существовать")
-    String mail;
-    */
+
     private final StringProperty username = new SimpleStringProperty("");
     private final StringProperty password = new SimpleStringProperty("");
+    private final StringProperty mail = new SimpleStringProperty("");
     private final ObjectProperty<LocalDateTime> created = new SimpleObjectProperty<>(LocalDateTime.now());     
            
     public User() {}
@@ -50,6 +44,22 @@ public class User implements Entity {
     }
     public StringProperty passwordProperty() {
         return password;
+    }
+    
+    @Size(min = 4, max = 64, message = "error.user.mail.size")
+    @Pattern(regexp = "^(?:[a-zA-Z0-9_'^&/+-])+(?:\\.(?:[a-zA-Z0-9_'^&/+-])+)" +
+        "*@(?:(?:\\[?(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?))\\.)" +
+        "{3}(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\]?)|(?:[a-zA-Z0-9-]+\\.)" +
+        "+(?:[a-zA-Z]){2,}\\.?)$", 
+        message = "error.user.mail.invalid")
+    public String getMail() {
+        return mail.get();
+    }
+    public void setMail(String value) {
+        mail.set(value);
+    }
+    public StringProperty mailProperty() {
+        return mail;
     }
     
     public LocalDateTime getCreated() {

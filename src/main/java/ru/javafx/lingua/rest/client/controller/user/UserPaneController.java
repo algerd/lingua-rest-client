@@ -29,24 +29,27 @@ public class UserPaneController extends EntityController<User> {
     @FXML
     private ImageView userImageView;
     @FXML
-    private Label usernameLabel;       
+    private Label usernameLabel; 
+    @FXML
+    private Label mailLabel;    
     @FXML
     private Label roleLabel; 
     @FXML
     private Label createdLabel; 
     
     @Override
-    public void initialize(URL location, ResourceBundle resources) {
+    public void initialize(URL location, ResourceBundle resources) {        
     }
     
     @Override
     public void show() {
         showDetails();
-        initRepositoryListeners();
+        initRepositoryListeners();      
     }
     
     private void showDetails() {   
-        usernameLabel.textProperty().bind(resource.getContent().usernameProperty());                                 
+        usernameLabel.textProperty().bind(resource.getContent().usernameProperty()); 
+        mailLabel.textProperty().bind(resource.getContent().mailProperty()); 
         createdLabel.textProperty().bind(resource.getContent().createdProperty().asString());
         titleProperty().bind(usernameLabel.textProperty());
         showImage();       

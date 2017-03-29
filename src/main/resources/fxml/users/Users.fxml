@@ -15,6 +15,7 @@
                     <columns>
                         <TableColumn fx:id="usernameColumn" maxWidth="2000.0" minWidth="50.0" prefWidth="100.0" text="Username" />
                         <TableColumn fx:id="roleColumn" maxWidth="2000.0" minWidth="50.0" prefWidth="100.0" text="Role" />
+                        <TableColumn fx:id="mailColumn" maxWidth="2000.0" minWidth="50.0" prefWidth="100.0" text="Mail" />
                         <TableColumn fx:id="createdColumn" minWidth="100.0" prefWidth="200.0" text="Created" />
                     </columns>
                     <columnResizePolicy>

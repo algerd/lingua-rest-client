@@ -5,6 +5,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.Button;
 import org.springframework.beans.factory.annotation.Autowired;
 import ru.javafx.lingua.rest.client.controller.words.WordsController;
@@ -27,7 +28,7 @@ public class AuthorizationController extends BaseFxmlController {
     @FXML
     private TextField usernameTextField;
     @FXML
-    private TextField passwordTextField;
+    private PasswordField passwordField;
     @FXML
     private Button okButton;
     
@@ -45,7 +46,7 @@ public class AuthorizationController extends BaseFxmlController {
     @FXML
     private void handleOkButton() {
         authorizationProperties.setUsername(usernameTextField.getText());
-        authorizationProperties.setPassword(passwordTextField.getText());
+        authorizationProperties.setPassword(passwordField.getText());
         if (!authorizationChecker.check()) {
             requestViewService.showPane(AuthorizationController.class);
         } else {
