@@ -6,6 +6,7 @@ import javafx.fxml.FXML;
 import javafx.scene.layout.AnchorPane;
 import org.springframework.beans.factory.annotation.Autowired;
 import ru.javafx.lingua.rest.client.authorization.AuthorizationController;
+import ru.javafx.lingua.rest.client.controller.user.UserPaneController;
 import ru.javafx.lingua.rest.client.controller.users.UsersController;
 import ru.javafx.lingua.rest.client.controller.words.WordsController;
 import ru.javafx.lingua.rest.client.core.gui.BaseAwareController;
@@ -44,6 +45,13 @@ public class TopBarController extends BaseAwareController {
     private void logout() {
         if (authorizationChecker.isAuthorize()) {
             requestViewService.showPane(AuthorizationController.class);
+        }
+    }
+    
+    @FXML
+    private void showAccount() {
+        if (authorizationChecker.isAuthorize()) {
+            requestViewService.showTab(UserPaneController.class, authorizationChecker.getUser());
         }
     }
      

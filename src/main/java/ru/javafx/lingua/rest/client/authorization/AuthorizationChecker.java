@@ -9,6 +9,7 @@ import java.util.Base64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
 import ru.javafx.lingua.rest.client.entity.User;
@@ -19,7 +20,7 @@ public class AuthorizationChecker {
     
     private final Logger logger = LoggerFactory.getLogger(getClass());
     private boolean isAuthorize = false;
-    private User user;
+    private Resource<User> user;
     
     @Autowired
     private AuthorizationProperties authorizationProperties;
@@ -34,7 +35,7 @@ public class AuthorizationChecker {
         isAuthorize = checkPpoperties() && checkAuthorization();       
         if (isAuthorize()) {
             try {
-                user = userRepository.findByUsername(authorizationProperties.getUsername()).getContent();
+                user = userRepository.findByUsername(authorizationProperties.getUsername());
             } catch (URISyntaxException ex) {
                 logger.error(ex.getMessage());
                 isAuthorize = false;
@@ -73,12 +74,8 @@ public class AuthorizationChecker {
         return false;
     }
 
-    public User getUser() {
+    public Resource<User> getUser() {
         return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
     }
     
 }

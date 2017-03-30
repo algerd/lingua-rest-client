@@ -13,6 +13,7 @@
                 <Button mnemonicParsing="false" onAction="#showWords" text="Words" />
                 <Button mnemonicParsing="false" onAction="#showUsers" text="Users" />
                 <Button mnemonicParsing="false" onAction="#logout" text="logout" />
+                <Button mnemonicParsing="false" onAction="#showAccount" text="Account" />
             </children>
             <opaqueInsets>
                 <Insets />
