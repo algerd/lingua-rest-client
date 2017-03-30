@@ -28,8 +28,8 @@ public class Starter extends BaseSpringBootJavaFxApplication {
             requestViewService.showPane(AuthorizationController.class);
         } else {
             requestViewService.showTab(WordsController.class);
-        }       
-        primaryStage.getIcons().add(new Image("images/icon_root_layout.png"));     
+        }           
+        primaryStage.getIcons().add(new Image("images/icon_root_layout.png"));
     }
 	
 }

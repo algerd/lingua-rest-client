@@ -40,6 +40,7 @@
             </GridPane>
             <Button fx:id="okButton" mnemonicParsing="false" onAction="#handleOkButton" prefWidth="50.0" text="OK" />
             <Hyperlink fx:id="registrationLink" onAction="#onLinkRegistration" text="Registration" />
+            <Label fx:id="errorLabel" textFill="#ed0707"/>
          </children>
          <padding>
             <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />

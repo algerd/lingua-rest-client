@@ -8,19 +8,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import ru.javafx.lingua.rest.client.authorization.AuthorizationController;
 import ru.javafx.lingua.rest.client.controller.users.UsersController;
 import ru.javafx.lingua.rest.client.controller.words.WordsController;
+import ru.javafx.lingua.rest.client.core.gui.BaseAwareController;
 import ru.javafx.lingua.rest.client.core.gui.MainController;
-import ru.javafx.lingua.rest.client.core.gui.service.RequestViewService;
-import ru.javafx.lingua.rest.client.fxintegrity.BaseFxmlController;
 import ru.javafx.lingua.rest.client.fxintegrity.FXMLController;
 
 @FXMLController
-public class TopBarController extends BaseFxmlController {
+public class TopBarController extends BaseAwareController {
          
     @Autowired
     private MainController parentController;
-    
-    @Autowired
-    private RequestViewService requestViewService;
     
     @FXML
     private AnchorPane topBar;
@@ -32,17 +28,23 @@ public class TopBarController extends BaseFxmlController {
     
     @FXML
     private void showWords() {
-        requestViewService.showTab(WordsController.class);
+        if (authorizationChecker.isAuthorize()) {
+            requestViewService.showTab(WordsController.class);
+        }    
     }
     
     @FXML
     private void showUsers() {
-        requestViewService.showTab(UsersController.class);
+        if (authorizationChecker.isAuthorize()) {
+            requestViewService.showTab(UsersController.class);
+        }
     }
     
     @FXML
     private void logout() {
-        requestViewService.showPane(AuthorizationController.class);
+        if (authorizationChecker.isAuthorize()) {
+            requestViewService.showPane(AuthorizationController.class);
+        }
     }
      
 }

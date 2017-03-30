@@ -20,28 +20,25 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 import ru.javafx.lingua.rest.client.controller.words.WordsController;
-import ru.javafx.lingua.rest.client.core.gui.service.RequestViewService;
 import ru.javafx.lingua.rest.client.entity.User;
-import ru.javafx.lingua.rest.client.fxintegrity.BaseFxmlController;
 import ru.javafx.lingua.rest.client.fxintegrity.FXMLController;
 import ru.javafx.lingua.rest.client.message.MessageDTO;
 import org.springframework.boot.json.BasicJsonParser;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
+import ru.javafx.lingua.rest.client.core.gui.BaseAwareController;
 import ru.javafx.lingua.rest.client.message.ErrorMessageHandler;
 import ru.javafx.lingua.rest.client.message.MessageType;
 
 @FXMLController(
     value = "/fxml/authorization/Registration.fxml",    
     title = "Registration")
-public class RegistrationController extends BaseFxmlController {
+public class RegistrationController extends BaseAwareController {
     
     private final User user = new User();
     
     @Autowired
     private AuthorizationProperties authorizationProperties;
-    @Autowired
-    private RequestViewService requestViewService;
     @Autowired
     private ErrorMessageHandler errorMessageHandler;
     @Autowired
@@ -121,7 +118,9 @@ public class RegistrationController extends BaseFxmlController {
                     authorizationProperties.setPassword(user.getPassword());
                     authorizationProperties.setMail(user.getMail());
                     authorizationProperties.updatePropertiesFile();
-                    requestViewService.showTab(WordsController.class);
+                    if (authorizationChecker.check()) {
+                        requestViewService.showTab(WordsController.class);
+                    }    
                 } else {
                     messages.forEach(this::validateFields);
                 }

@@ -3,6 +3,7 @@ package ru.javafx.lingua.rest.client.authorization;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Base64;
 import org.slf4j.Logger;
@@ -10,22 +11,35 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
+import ru.javafx.lingua.rest.client.entity.User;
+import ru.javafx.lingua.rest.client.repository.UserRepository;
 
 @Component
 public class AuthorizationChecker {
     
     private final Logger logger = LoggerFactory.getLogger(getClass());
     private boolean isAuthorize = false;
+    private User user;
     
     @Autowired
     private AuthorizationProperties authorizationProperties;
+    @Autowired
+    private UserRepository userRepository;
     
     private boolean checkPpoperties() {
         return authorizationProperties.isUsernameAndPassword();
     }
           
     public boolean check() {
-        isAuthorize = checkPpoperties() && checkAuthorization();
+        isAuthorize = checkPpoperties() && checkAuthorization();       
+        if (isAuthorize()) {
+            try {
+                user = userRepository.findByUsername(authorizationProperties.getUsername()).getContent();
+            } catch (URISyntaxException ex) {
+                logger.error(ex.getMessage());
+                isAuthorize = false;
+            }
+        }
         return isAuthorize;       
     }
 
@@ -57,6 +71,14 @@ public class AuthorizationChecker {
             System.exit(0);
 		} 
         return false;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
     
 }
