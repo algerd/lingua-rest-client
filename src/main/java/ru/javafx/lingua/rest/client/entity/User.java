@@ -93,7 +93,7 @@ public class User implements Entity {
         lastVisited.setValue(value);
     }  
     public ObjectProperty<LocalDateTime> lastVisitedProperty() {
-        return created;
+        return lastVisited;
     }
 
     @Override

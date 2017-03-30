@@ -59,7 +59,7 @@ public class UsersController extends PagedTableController<User> {
         createdColumn.setCellValueFactory(cellData -> cellData.getValue().getContent().createdProperty().asString());
         mailColumn.setCellValueFactory(cellData -> cellData.getValue().getContent().mailProperty());  
         ipColumn.setCellValueFactory(cellData -> cellData.getValue().getContent().ipProperty()); 
-        lastVisitedColumn.setCellValueFactory(cellData -> cellData.getValue().getContent().createdProperty().asString());
+        lastVisitedColumn.setCellValueFactory(cellData -> cellData.getValue().getContent().lastVisitedProperty().asString());
     }
     
     @Override
