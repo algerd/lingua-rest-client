@@ -35,7 +35,12 @@ public class UsersController extends PagedTableController<User> {
     @FXML
     private TableColumn<Resource<User>, String> mailColumn;
     @FXML
+    private TableColumn<Resource<User>, String> ipColumn;   
+    @FXML
     private TableColumn<Resource<User>, String> createdColumn; 
+    @FXML
+    private TableColumn<Resource<User>, String> lastVisitedColumn;
+    
 
     public UsersController() {
     }
@@ -53,6 +58,8 @@ public class UsersController extends PagedTableController<User> {
         usernameColumn.setCellValueFactory(cellData -> cellData.getValue().getContent().usernameProperty());  
         createdColumn.setCellValueFactory(cellData -> cellData.getValue().getContent().createdProperty().asString());
         mailColumn.setCellValueFactory(cellData -> cellData.getValue().getContent().mailProperty());  
+        ipColumn.setCellValueFactory(cellData -> cellData.getValue().getContent().ipProperty()); 
+        lastVisitedColumn.setCellValueFactory(cellData -> cellData.getValue().getContent().createdProperty().asString());
     }
     
     @Override

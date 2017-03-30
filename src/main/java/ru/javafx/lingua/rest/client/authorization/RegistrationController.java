@@ -63,6 +63,8 @@ public class RegistrationController extends BaseFxmlController {
     private Label password1ErrorLabel;
     @FXML
     private Label password2ErrorLabel; 
+    @FXML
+    private Label errorLabel;
     
     @Override
     public void initialize(URL location, ResourceBundle resources) {  
@@ -158,7 +160,7 @@ public class RegistrationController extends BaseFxmlController {
                 password2ErrorLabel.setText(message.getMessage());
                 break;
             default:
-                //defaultErrorLabel.setText(message.getMessage());
+                errorLabel.setText(message.getMessage());
                 break; 
         }
     }

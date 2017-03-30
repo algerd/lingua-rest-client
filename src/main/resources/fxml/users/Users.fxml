@@ -14,9 +14,11 @@
                 <TableView fx:id="pagedTable" onMouseClicked="#onMouseClickTable" layoutX="107.0" layoutY="47.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
                     <columns>
                         <TableColumn fx:id="usernameColumn" maxWidth="2000.0" minWidth="50.0" prefWidth="100.0" text="Username" />
-                        <TableColumn fx:id="roleColumn" maxWidth="2000.0" minWidth="50.0" prefWidth="100.0" text="Role" />
+                        <TableColumn fx:id="roleColumn" maxWidth="2000.0" minWidth="50.0" prefWidth="60.0" text="Role" />
                         <TableColumn fx:id="mailColumn" maxWidth="2000.0" minWidth="50.0" prefWidth="100.0" text="Mail" />
+                        <TableColumn fx:id="ipColumn" maxWidth="2000.0" minWidth="50.0" prefWidth="60.0" text="Ip" />
                         <TableColumn fx:id="createdColumn" minWidth="100.0" prefWidth="200.0" text="Created" />
+                        <TableColumn fx:id="lastVisitedColumn" minWidth="100.0" prefWidth="200.0" text="Last Visited" />
                     </columns>
                     <columnResizePolicy>
                         <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />

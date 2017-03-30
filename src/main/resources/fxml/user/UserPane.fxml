@@ -36,16 +36,23 @@
                                         <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="25.0" />
                                         <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="25.0" />
                                         <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="25.0" />
+                                        <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="25.0" />
+                                        <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="25.0" />
                                     </rowConstraints>
                                     <children>
-                                       <Label text="Username:" />
+                                       <Label text="Username:" GridPane.rowIndex="0" />
                                        <Label text="Role:" GridPane.rowIndex="1" />
-                                       <Label text="User:" GridPane.rowIndex="2" />
-                                       <Label text="Created:" GridPane.rowIndex="3" />  
-                                       <Label fx:id="usernameLabel" text="Label" GridPane.columnIndex="1" />
+                                       <Label text="Mail:" GridPane.rowIndex="2" />
+                                       <Label text="Ip:" GridPane.rowIndex="3" />
+                                       <Label text="Created:" GridPane.rowIndex="4" /> 
+                                       <Label text="Last Visited:" GridPane.rowIndex="5" /> 
+                                       
+                                       <Label fx:id="usernameLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="0" />
                                        <Label fx:id="roleLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                                        <Label fx:id="mailLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                                       <Label fx:id="createdLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                                       <Label fx:id="ipLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                                       <Label fx:id="createdLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                                       <Label fx:id="lastVisitedLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="5" />     
                                     </children>
                                 </GridPane>
                             </children>

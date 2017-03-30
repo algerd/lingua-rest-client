@@ -20,8 +20,10 @@ public class User implements Entity {
     private final StringProperty username = new SimpleStringProperty("");
     private final StringProperty password = new SimpleStringProperty("");
     private final StringProperty mail = new SimpleStringProperty("");
+    private final StringProperty ip = new SimpleStringProperty("");
     private final ObjectProperty<LocalDateTime> created = new SimpleObjectProperty<>(LocalDateTime.now());     
-           
+    private final ObjectProperty<LocalDateTime> lastVisited = new SimpleObjectProperty<>(LocalDateTime.now());        
+    
     public User() {}
     
     @Size(min = 4, max = 64, message = "error.user.username.size")
@@ -62,6 +64,16 @@ public class User implements Entity {
         return mail;
     }
     
+    public String getIp() {
+        return ip.get();
+    }
+    public void setIp(String value) {
+        ip.set(value);
+    }
+    public StringProperty ipProperty() {
+        return ip;
+    }
+    
     public LocalDateTime getCreated() {
         return created.get();
     }   
@@ -70,6 +82,17 @@ public class User implements Entity {
         created.setValue(value);
     }  
     public ObjectProperty<LocalDateTime> createdProperty() {
+        return created;
+    }
+    
+    public LocalDateTime getLastVisited() {
+        return lastVisited.get();
+    }   
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    public void setLastVisited(LocalDateTime value) {
+        lastVisited.setValue(value);
+    }  
+    public ObjectProperty<LocalDateTime> lastVisitedProperty() {
         return created;
     }
 

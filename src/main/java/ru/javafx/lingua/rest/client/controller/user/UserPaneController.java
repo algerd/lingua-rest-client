@@ -33,9 +33,13 @@ public class UserPaneController extends EntityController<User> {
     @FXML
     private Label mailLabel;    
     @FXML
-    private Label roleLabel; 
+    private Label roleLabel;
+    @FXML
+    private Label ipLabel;    
     @FXML
     private Label createdLabel; 
+    @FXML
+    private Label lastVisitedLabel; 
     
     @Override
     public void initialize(URL location, ResourceBundle resources) {        
@@ -50,7 +54,9 @@ public class UserPaneController extends EntityController<User> {
     private void showDetails() {   
         usernameLabel.textProperty().bind(resource.getContent().usernameProperty()); 
         mailLabel.textProperty().bind(resource.getContent().mailProperty()); 
+        ipLabel.textProperty().bind(resource.getContent().ipProperty());
         createdLabel.textProperty().bind(resource.getContent().createdProperty().asString());
+        lastVisitedLabel.textProperty().bind(resource.getContent().lastVisitedProperty().asString());
         titleProperty().bind(usernameLabel.textProperty());
         showImage();       
     }
