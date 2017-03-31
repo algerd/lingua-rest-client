@@ -82,7 +82,7 @@ public class RegistrationController extends BaseAwareController {
         
         List<MessageDTO> messages = errorMessageHandler.getErrorMessages(user);
         validateInput(messages);
-        logger.info("ErrorMessages: {}", messages);
+        //logger.info("ErrorMessages: {}", messages);
         
         if (messages.isEmpty()) {
             registr();

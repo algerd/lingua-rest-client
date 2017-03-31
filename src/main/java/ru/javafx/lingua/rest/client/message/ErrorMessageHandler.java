@@ -41,5 +41,21 @@ public class ErrorMessageHandler {
         });
         return messages;    
     }
-
+    
+    public void getErrorMessages(Object obj, List<MessageDTO> messages) {
+        
+        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+        Validator validator = factory.getValidator();
+        Set<ConstraintViolation<Object>> constraintViolations = validator.validate(obj);
+        
+        constraintViolations.forEach(constraintViolation -> {           
+            Locale currentLocale = LocaleContextHolder.getLocale();        
+            String message = messageSource.getMessage(constraintViolation.getMessage(), null, currentLocale);
+            String fieldname = constraintViolation.getPropertyPath().toString();
+            MessageDTO messageDTO = new MessageDTO(MessageType.ERROR.toString(), message, fieldname);
+            messages.add(messageDTO);
+            //logger.info("MessageDTO: {}", messageDTO);
+        });   
+    }
+ 
 }

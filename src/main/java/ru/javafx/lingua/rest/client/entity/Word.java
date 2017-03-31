@@ -11,6 +11,8 @@ import javafx.beans.property.StringProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import java.time.LocalDateTime;
+import javax.validation.constraints.Size;
+import org.hibernate.validator.constraints.NotBlank;
 
 @RelPath("words")
 public class Word implements Entity {
@@ -21,7 +23,9 @@ public class Word implements Entity {
     private final ObjectProperty<LocalDateTime> created = new SimpleObjectProperty<>(LocalDateTime.now());
     
     public Word() {}
-       
+    
+    @NotBlank(message = "error.word.word.empty")
+    @Size(max = 64, message = "error.word.word.size")
     public String getWord() {
         return word.get();
     }
@@ -42,6 +46,8 @@ public class Word implements Entity {
         return transcription;
     }
     
+    @NotBlank(message = "error.word.translation.empty")
+    @Size(max = 64, message = "error.word.translation.size")
     public String getTranslation() {
         return translation.get();
     }

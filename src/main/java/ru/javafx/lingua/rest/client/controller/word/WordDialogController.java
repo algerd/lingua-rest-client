@@ -3,6 +3,8 @@ package ru.javafx.lingua.rest.client.controller.word;
 
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
@@ -11,10 +13,15 @@ import ru.javafx.lingua.rest.client.core.gui.BaseDialogController;
 import ru.javafx.lingua.rest.client.entity.Word;
 import ru.javafx.lingua.rest.client.fxintegrity.FXMLController;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.hateoas.Resource;
 import ru.javafx.lingua.rest.client.core.datacore.impl.WrapChangedEntity;
 import ru.javafx.lingua.rest.client.core.gui.inputImageBox.DialogImageBoxController;
 import ru.javafx.lingua.rest.client.core.gui.utils.Helper;
+import ru.javafx.lingua.rest.client.message.ErrorMessageHandler;
+import ru.javafx.lingua.rest.client.message.MessageDTO;
+import ru.javafx.lingua.rest.client.message.MessageType;
 import ru.javafx.lingua.rest.client.repository.WordRepository;
 
 @FXMLController(
@@ -23,10 +30,12 @@ import ru.javafx.lingua.rest.client.repository.WordRepository;
 @Scope("prototype")
 public class WordDialogController extends BaseDialogController<Word> {
     
-    private Word word; 
-    
     @Autowired
     private WordRepository wordRepository;
+    @Autowired
+    private ErrorMessageHandler errorMessageHandler;
+    @Autowired
+    private MessageSource messageSource;
     
     @FXML
     private DialogImageBoxController includedDialogImageBoxController;
@@ -46,17 +55,38 @@ public class WordDialogController extends BaseDialogController<Word> {
         includedDialogImageBoxController.setStage(dialogStage);
     }
     
+    List<MessageDTO> validate(Object obj) {
+        List<MessageDTO> messages = errorMessageHandler.getErrorMessages(obj);
+        if (messages.isEmpty()) {
+            messages.addAll(validateInput());                           
+        }
+        return messages;
+    } 
+    
     @FXML
     @Override
     protected void handleOkButton() {
-        if (isInputValid()) { 
-            word.setWord(wordTextField.getText().trim());
-            word.setTranscription(transcriptionTextField.getText().trim());
-            word.setTranslation(translationTextField.getText().trim());
-            //word.setCreated(LocalDateTime.now());
+        
+        Word word = new Word();
+        word.setWord(wordTextField.getText().trim());
+        word.setTranscription(transcriptionTextField.getText().trim());
+        word.setTranslation(translationTextField.getText().trim());
+        
+        List<MessageDTO> messages = errorMessageHandler.getErrorMessages(word);
+        if (messages.isEmpty()) {
+            messages.addAll(validateInput());                           
+        }
+        if (messages.isEmpty()) { 
             try { 
-                resource = edit ? wordRepository.update(resource) : wordRepository.saveAndGetResource(word);
-                //logger.info("Saved Artist Resource: {}", resource);                
+                if (edit) {
+                    resource.getContent().setWord(word.getWord());
+                    resource.getContent().setTranscription(word.getTranscription());
+                    resource.getContent().setTranslation(word.getTranslation());
+                    resource = wordRepository.update(resource);
+                } else {
+                    resource = wordRepository.saveAndGetResource(word);
+                }
+                
                 if (includedDialogImageBoxController.isChangedImage()) {
                     wordRepository.saveImage(resource, includedDialogImageBoxController.getImage());
                     includedDialogImageBoxController.setChangedImage(false);                              
@@ -70,49 +100,39 @@ public class WordDialogController extends BaseDialogController<Word> {
                 edit = false;
             } catch (URISyntaxException ex) {
                 logger.error(ex.getMessage());
-            }
-            
+            }        
+        } else {
+            errorMessage(messages);
         }
     }
     
-    @Override
-    protected boolean isInputValid() {
-        String errorMessage = "";
-        String wordText = wordTextField.getText(); 
-        String translation = translationTextField.getText();
-        if (wordText == null || wordText.trim().equals("")) {
-            errorMessage = "Введите слово!\n";
-        } else if(translation == null || translation.trim().equals("")) {
-            errorMessage = "Введите перевод!\n";
-        } else { 
-            wordText = wordText.trim().toLowerCase();
-            try {
-                if (!word.getWord().toLowerCase().equals(wordText) && 
-                        wordRepository.getPagedResources("word=" + wordText.trim().toLowerCase()).getMetadata().getTotalElements() > 0) {
-                    errorMessage = "Такое слово уже есть!\n";
-                }
-            } catch (URISyntaxException ex) {
-                logger.error(ex.getMessage());
-            } 
+    private List<MessageDTO> validateInput() {
+        List<MessageDTO> messages = new ArrayList<>();
+        try {
+            String wordText = wordTextField.getText().trim().toLowerCase();
+            if ((!edit || !resource.getContent().getWord().toLowerCase().equals(wordText)) && 
+                    wordRepository.getPagedResources("word=" + wordText.trim().toLowerCase()).getMetadata().getTotalElements() > 0) {
+                
+                messages.add(new MessageDTO(
+                    MessageType.ERROR.toString(),
+                    messageSource.getMessage("error.word.word.duplicate", null, LocaleContextHolder.getLocale()),
+                    "word"
+                ));
+            }
+        } catch (URISyntaxException ex) {
+            logger.error(ex.getMessage());
         }
-        if (errorMessage.equals("")) {
-            return true;
-        } 
-        else {
-            errorMessage(errorMessage);         
-            return false;
-        }
+        return messages;
     }
     
     @Override
     protected void add() {
-        word = new Word();    
     }
        
     @Override
     protected void edit() { 
         edit = true;
-        word = resource.getContent();
+        Word word = resource.getContent();
         oldResource = new Resource<>(word.clone(), resource.getLinks());  
         
         wordTextField.setText(word.getWord());

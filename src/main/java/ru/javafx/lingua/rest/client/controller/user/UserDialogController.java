@@ -24,8 +24,6 @@ import ru.javafx.lingua.rest.client.repository.UserRepository;
 @Scope("prototype")
 public class UserDialogController extends BaseDialogController<User> {
     
-    private User user; 
-    
     @Autowired
     private UserRepository userRepository;
     
@@ -51,14 +49,13 @@ public class UserDialogController extends BaseDialogController<User> {
     }
     
     @Override
-    protected void add() {
-        user = new User();    
+    protected void add() {  
     }
        
     @Override
     protected void edit() { 
         edit = true;
-        user = resource.getContent();
+        User user = resource.getContent();
         //oldResource = new Resource<>(user.clone(), resource.getLinks());  
         
         usernameTextField.setText(user.getUsername());
@@ -69,19 +66,15 @@ public class UserDialogController extends BaseDialogController<User> {
         }
     }
     
-    @Override
-    protected boolean isInputValid() {
-        return true;
-    }
     
     @FXML
     @Override
     protected void handleOkButton() {
-        if (isInputValid()) { 
+            /*
             user.setUsername(usernameTextField.getText().trim());
             user.setMail(mailTextField.getText().trim());
             user.setPassword(passwordField1.getText().trim());
-            /*
+            
             try { 
                 resource = edit ? wordRepository.update(resource) : wordRepository.saveAndGetResource(word);
                 //logger.info("Saved Artist Resource: {}", resource);                
@@ -100,7 +93,7 @@ public class UserDialogController extends BaseDialogController<User> {
                 logger.error(ex.getMessage());
             }
             */
-        }
+        
     }
     
 }

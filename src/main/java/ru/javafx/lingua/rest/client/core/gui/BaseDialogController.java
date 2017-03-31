@@ -1,11 +1,13 @@
 
 package ru.javafx.lingua.rest.client.core.gui;
 
+import java.util.List;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.stage.Stage;
 import org.springframework.hateoas.Resource;
 import ru.javafx.lingua.rest.client.core.Entity;
+import ru.javafx.lingua.rest.client.message.MessageDTO;
 
 public abstract class BaseDialogController<T extends Entity> extends BaseAwareController implements DialogController<T> {
     
@@ -31,12 +33,16 @@ public abstract class BaseDialogController<T extends Entity> extends BaseAwareCo
         }      
     }
     
-    protected void errorMessage(String errorMessage) {
+    protected void errorMessage(List<MessageDTO> messages) {
+        String messageStr = "";
+        for (MessageDTO message : messages) {
+            messageStr += message.getField() + ": " + message.getMessage() + "\n";
+        }
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.initOwner(dialogStage);
         alert.setTitle("Invalid Fields");
-        alert.setHeaderText("Please correct invalid fields");
-        alert.setContentText(errorMessage);           
+        alert.setHeaderText("Please correct invalid fields:");
+        alert.setContentText(messageStr);           
         alert.showAndWait();  
     }
     
@@ -48,8 +54,6 @@ public abstract class BaseDialogController<T extends Entity> extends BaseAwareCo
     protected abstract void add();
     
     protected abstract void edit();
-    
-    protected abstract boolean isInputValid();
     
     protected abstract void handleOkButton();
        
