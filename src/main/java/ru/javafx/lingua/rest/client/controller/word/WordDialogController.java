@@ -3,11 +3,9 @@ package ru.javafx.lingua.rest.client.controller.word;
 
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.time.LocalDateTime;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.AnchorPane;
 import org.springframework.context.annotation.Scope;
 import ru.javafx.lingua.rest.client.core.gui.BaseDialogController;
 import ru.javafx.lingua.rest.client.entity.Word;
@@ -33,8 +31,6 @@ public class WordDialogController extends BaseDialogController<Word> {
     @FXML
     private DialogImageBoxController includedDialogImageBoxController;
     
-    @FXML
-    private AnchorPane view;
     @FXML
     private TextField wordTextField;
     @FXML

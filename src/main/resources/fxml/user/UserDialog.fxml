@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.*?>
 
 <AnchorPane id="AnchorPane" fx:id="view" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" 
-            fx:controller="ru.javafx.lingua.rest.client.controller.word.WordDialogController">
+            fx:controller="ru.javafx.lingua.rest.client.controller.user.UserDialogController">
     <children>
         <VBox layoutX="10.0" layoutY="20.0" spacing="20.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
             <children>
@@ -24,17 +24,20 @@
                                         <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="250.0" />
                                     </columnConstraints>
                                     <rowConstraints>
-                                        <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="25.0"/>
-                                        <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="25.0"/>
-                                        <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="25.0"/>
+                                        <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="25.0" vgrow="SOMETIMES" />
+                                        <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="25.0" vgrow="SOMETIMES" />
+                                        <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="25.0" vgrow="SOMETIMES" />
+                                        <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="25.0" vgrow="SOMETIMES" />
                                     </rowConstraints>
                                     <children>
-                                       <Label text="Word" />
-                                       <Label text="Transcription" GridPane.rowIndex="1" />
-                                       <Label text="Translation" GridPane.rowIndex="2" />   
-                                       <TextField fx:id="wordTextField" GridPane.columnIndex="1" />
-                                       <TextField fx:id="transcriptionTextField" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                                       <TextField fx:id="translationTextField" GridPane.columnIndex="1" GridPane.rowIndex="2" />                                    
+                                       <Label text="Username:" GridPane.rowIndex="0" />
+                                       <Label text="Mail:" GridPane.rowIndex="1" />
+                                       <Label text="Password:" GridPane.rowIndex="2" /> 
+                                       <Label text="Repeat Password:" GridPane.rowIndex="3" />
+                                       <TextField fx:id="usernameTextField" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+                                       <TextField fx:id="mailTextField" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                       <PasswordField fx:id="passwordField1" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                                       <PasswordField fx:id="passwordField2" GridPane.columnIndex="1" GridPane.rowIndex="3" />                                  
                                     </children>
                                 </GridPane>
                             </children>

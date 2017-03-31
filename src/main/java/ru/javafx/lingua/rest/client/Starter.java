@@ -3,7 +3,7 @@ package ru.javafx.lingua.rest.client;
 import javafx.scene.image.Image;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import ru.javafx.lingua.rest.client.authorization.AuthorizationChecker;
+import ru.javafx.lingua.rest.client.authorization.Authorization;
 import ru.javafx.lingua.rest.client.authorization.AuthorizationController;
 import ru.javafx.lingua.rest.client.controller.MainControllerImpl;
 import ru.javafx.lingua.rest.client.controller.words.WordsController;
@@ -20,7 +20,7 @@ public class Starter extends BaseSpringBootJavaFxApplication {
     @Autowired
     private RequestViewService requestViewService;
     @Autowired
-    private AuthorizationChecker authorizationChecker;
+    private Authorization authorizationChecker;
 
     @Override
     public void show() {

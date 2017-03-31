@@ -16,7 +16,7 @@ import ru.javafx.lingua.rest.client.entity.User;
 import ru.javafx.lingua.rest.client.repository.UserRepository;
 
 @Component
-public class AuthorizationChecker {
+public class Authorization {
     
     private final Logger logger = LoggerFactory.getLogger(getClass());
     private boolean isAuthorize = false;

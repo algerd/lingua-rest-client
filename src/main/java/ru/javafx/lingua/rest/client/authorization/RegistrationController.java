@@ -27,6 +27,7 @@ import org.springframework.boot.json.BasicJsonParser;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import ru.javafx.lingua.rest.client.core.gui.BaseAwareController;
+import ru.javafx.lingua.rest.client.core.gui.utils.Helper;
 import ru.javafx.lingua.rest.client.message.ErrorMessageHandler;
 import ru.javafx.lingua.rest.client.message.MessageType;
 
@@ -65,6 +66,10 @@ public class RegistrationController extends BaseAwareController {
     
     @Override
     public void initialize(URL location, ResourceBundle resources) {  
+        Helper.limitTextInput(usernameTextField, 64);
+        Helper.limitTextInput(mailTextField, 64);
+        Helper.limitTextInput(passwordField1, 64);
+        Helper.limitTextInput(passwordField2, 64);
     }
   
     @FXML
@@ -118,7 +123,7 @@ public class RegistrationController extends BaseAwareController {
                     authorizationProperties.setPassword(user.getPassword());
                     authorizationProperties.setMail(user.getMail());
                     authorizationProperties.updatePropertiesFile();
-                    if (authorizationChecker.check()) {
+                    if (authorization.check()) {
                         requestViewService.showTab(WordsController.class);
                     }    
                 } else {

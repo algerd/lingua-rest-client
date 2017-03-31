@@ -29,29 +29,29 @@ public class TopBarController extends BaseAwareController {
     
     @FXML
     private void showWords() {
-        if (authorizationChecker.isAuthorize()) {
+        if (authorization.isAuthorize()) {
             requestViewService.showTab(WordsController.class);
         }    
     }
     
     @FXML
     private void showUsers() {
-        if (authorizationChecker.isAuthorize()) {
+        if (authorization.isAuthorize()) {
             requestViewService.showTab(UsersController.class);
         }
     }
     
     @FXML
     private void logout() {
-        if (authorizationChecker.isAuthorize()) {
+        if (authorization.isAuthorize()) {
             requestViewService.showPane(AuthorizationController.class);
         }
     }
     
     @FXML
     private void showAccount() {
-        if (authorizationChecker.isAuthorize()) {
-            requestViewService.showTab(UserPaneController.class, authorizationChecker.getUser());
+        if (authorization.isAuthorize()) {
+            requestViewService.showTab(UserPaneController.class, authorization.getUser());
         }
     }
      

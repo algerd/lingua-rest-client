@@ -8,11 +8,14 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.hateoas.Resource;
 import ru.javafx.lingua.rest.client.core.datacore.impl.WrapChangedEntity;
 import ru.javafx.lingua.rest.client.core.gui.EntityController;
+import static ru.javafx.lingua.rest.client.core.gui.service.ContextMenuItemType.EDIT_USER;
 import ru.javafx.lingua.rest.client.entity.User;
 import ru.javafx.lingua.rest.client.fxintegrity.FXMLController;
 import ru.javafx.lingua.rest.client.repository.UserRepository;
@@ -87,6 +90,22 @@ public class UserPaneController extends EntityController<User> {
         if (newResource.getId().equals(resource.getId())) {         
             showImage();
         }     
+    }
+    
+    @FXML
+    private void showContextMenu(MouseEvent mouseEvent) {
+        contextMenuService.clear();
+		if (mouseEvent.getButton() == MouseButton.SECONDARY) { 
+            if (authorization.isAuthorize() && authorization.getUser().getId().equals(resource.getId())) {
+                contextMenuService.add(EDIT_USER, resource);
+                /*
+                if (authorization.getRole().equals(ADMIN)) {
+                    contextMenuService.add(DELETE_USER, resource);
+                }
+                */
+                contextMenuService.show(view, mouseEvent);
+            }
+        }      
     }
 
 }

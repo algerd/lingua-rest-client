@@ -14,6 +14,7 @@ import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import ru.javafx.lingua.rest.client.controller.words.WordsController;
 import ru.javafx.lingua.rest.client.core.gui.BaseAwareController;
+import ru.javafx.lingua.rest.client.core.gui.utils.Helper;
 import ru.javafx.lingua.rest.client.fxintegrity.FXMLController;
 
 @FXMLController(
@@ -38,7 +39,8 @@ public class AuthorizationController extends BaseAwareController {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        
+        Helper.limitTextInput(usernameTextField, 64);
+        Helper.limitTextInput(passwordField, 64);
     }
     
     @FXML 
@@ -50,7 +52,7 @@ public class AuthorizationController extends BaseAwareController {
     private void handleOkButton() {
         authorizationProperties.setUsername(usernameTextField.getText());
         authorizationProperties.setPassword(passwordField.getText());
-        if (authorizationChecker.check()) {
+        if (authorization.check()) {
             authorizationProperties.updatePropertiesFile();
             requestViewService.showTab(WordsController.class);
         } else {

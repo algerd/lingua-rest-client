@@ -9,6 +9,9 @@ public enum ContextMenuItemType {
         ADD_WORD(new MenuItem("Add Word")),
         EDIT_WORD(new MenuItem("Edit Word")),
         DELETE_WORD(new MenuItem("Delete Word")),
+        
+        EDIT_USER(new MenuItem("Edit User")),
+        DELETE_USER(new MenuItem("Delete User")),
                              
         SEPARATOR(new SeparatorMenuItem());
         
