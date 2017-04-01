@@ -54,15 +54,7 @@ public class WordDialogController extends BaseDialogController<Word> {
         Helper.limitTextInput(translationTextField, 255);
         includedDialogImageBoxController.setStage(dialogStage);
     }
-    
-    List<MessageDTO> validate(Object obj) {
-        List<MessageDTO> messages = errorMessageHandler.getErrorMessages(obj);
-        if (messages.isEmpty()) {
-            messages.addAll(validateInput());                           
-        }
-        return messages;
-    } 
-    
+       
     @FXML
     @Override
     protected void handleOkButton() {

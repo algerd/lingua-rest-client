@@ -93,7 +93,6 @@ public class WordPaneController extends EntityController<Word> {
     private void showContextMenu(MouseEvent mouseEvent) {
         contextMenuService.clear();
 		if (mouseEvent.getButton() == MouseButton.SECONDARY) {       
-            contextMenuService.add(ADD_WORD, null);
             contextMenuService.add(EDIT_WORD, resource);
             contextMenuService.add(DELETE_WORD, resource);                       
             contextMenuService.show(view, mouseEvent);
