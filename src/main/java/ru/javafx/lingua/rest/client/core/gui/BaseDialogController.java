@@ -7,6 +7,7 @@ import javafx.scene.control.Alert;
 import javafx.stage.Stage;
 import org.springframework.hateoas.Resource;
 import ru.javafx.lingua.rest.client.core.Entity;
+import ru.javafx.lingua.rest.client.message.ErrorMessage;
 import ru.javafx.lingua.rest.client.message.MessageDTO;
 
 public abstract class BaseDialogController<T extends Entity> extends BaseAwareController implements DialogController<T> {
@@ -33,10 +34,10 @@ public abstract class BaseDialogController<T extends Entity> extends BaseAwareCo
         }      
     }
     
-    protected void errorMessage(List<MessageDTO> messages) {
+    protected void errorMessage(List<ErrorMessage> messages) {
         String messageStr = "";
-        for (MessageDTO message : messages) {
-            messageStr += message.getField() + ": " + message.getMessage() + "\n";
+        for (ErrorMessage message : messages) {
+            messageStr += message.getProperty() + ": " + message.getMessage() + "\n";
         }
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.initOwner(dialogStage);
@@ -45,7 +46,7 @@ public abstract class BaseDialogController<T extends Entity> extends BaseAwareCo
         alert.setContentText(messageStr);           
         alert.showAndWait();  
     }
-    
+       
     @FXML
     protected void handleCancelButton() {
         dialogStage.close();

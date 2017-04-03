@@ -24,7 +24,41 @@ public class ErrorMessageHandler {
     @Autowired
     private MessageSource messageSource;
     
-    public List<MessageDTO> getErrorMessages(Object obj) {
+    public List<ErrorMessage> getErrorMessages(Object obj) {
+        
+        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+        Validator validator = factory.getValidator();
+        Set<ConstraintViolation<Object>> constraintViolations = validator.validate(obj);
+        List<ErrorMessage> messages = new ArrayList<>();
+        
+        constraintViolations.forEach(constraintViolation -> {                 
+            ErrorMessage errorMessage = new ErrorMessage();
+            errorMessage.setProperty(constraintViolation.getPropertyPath().toString());
+            errorMessage.setMessage(messageSource.getMessage(constraintViolation.getMessage(), null, LocaleContextHolder.getLocale()));
+            //errorMessage.setInvalidValue(constraintViolation.getInvalidValue());
+            messages.add(errorMessage);
+            //logger.info("MessageDTO: {}", messageDTO);
+        });
+        return messages;    
+    } 
+    
+    public void getErrorMessages(Object obj, List<ErrorMessage> messages) {
+        
+        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+        Validator validator = factory.getValidator();
+        Set<ConstraintViolation<Object>> constraintViolations = validator.validate(obj);
+        
+        constraintViolations.forEach(constraintViolation -> {                 
+            ErrorMessage errorMessage = new ErrorMessage();
+            errorMessage.setProperty(constraintViolation.getPropertyPath().toString());
+            errorMessage.setMessage(messageSource.getMessage(constraintViolation.getMessage(), null, LocaleContextHolder.getLocale()));
+            //errorMessage.setInvalidValue(constraintViolation.getInvalidValue());
+            messages.add(errorMessage);
+            //logger.info("MessageDTO: {}", messageDTO);
+        });   
+    } 
+    
+    public List<MessageDTO> getErrorMessagesDTO(Object obj) {
         
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
         Validator validator = factory.getValidator();
@@ -35,14 +69,17 @@ public class ErrorMessageHandler {
             Locale currentLocale = LocaleContextHolder.getLocale();        
             String message = messageSource.getMessage(constraintViolation.getMessage(), null, currentLocale);
             String fieldname = constraintViolation.getPropertyPath().toString();
-            MessageDTO messageDTO = new MessageDTO(MessageType.ERROR.toString(), message, fieldname);
+            Object invalidValue = constraintViolation.getInvalidValue();
+            MessageDTO messageDTO = new MessageDTO(MessageType.ERROR.toString(), message, fieldname, invalidValue);
             messages.add(messageDTO);
             //logger.info("MessageDTO: {}", messageDTO);
         });
         return messages;    
     }
     
-    public void getErrorMessages(Object obj, List<MessageDTO> messages) {
+    
+    
+    public void getErrorMessagesDTO(Object obj, List<MessageDTO> messages) {
         
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
         Validator validator = factory.getValidator();

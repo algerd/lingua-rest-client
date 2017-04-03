@@ -4,9 +4,7 @@ package ru.javafx.lingua.rest.client.authorization;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -14,7 +12,6 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javax.xml.ws.http.HTTPException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.json.JsonParser;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +20,6 @@ import ru.javafx.lingua.rest.client.controller.words.WordsController;
 import ru.javafx.lingua.rest.client.entity.User;
 import ru.javafx.lingua.rest.client.fxintegrity.FXMLController;
 import ru.javafx.lingua.rest.client.message.MessageDTO;
-import org.springframework.boot.json.BasicJsonParser;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import ru.javafx.lingua.rest.client.core.gui.BaseAwareController;
@@ -80,7 +76,7 @@ public class RegistrationController extends BaseAwareController {
         user.setPassword(passwordField1.getText().trim());
         user.setMail(mailTextField.getText().trim());
         
-        List<MessageDTO> messages = errorMessageHandler.getErrorMessages(user);
+        List<MessageDTO> messages = errorMessageHandler.getErrorMessagesDTO(user);
         validateInput(messages);
         //logger.info("ErrorMessages: {}", messages);
         
@@ -117,7 +113,7 @@ public class RegistrationController extends BaseAwareController {
             
             if (response.getStatusCode().equals(HttpStatus.OK)) {            
                 //logger.info("Registration ResponseBody: {}", response.getBody());          
-                List<MessageDTO> messages = parseJsonResponse(response);
+                List<MessageDTO> messages = MessageDTO.parseJsonResponse(response);
                 if (messages.isEmpty()) { 
                     authorizationProperties.setUsername(user.getUsername());
                     authorizationProperties.setPassword(user.getPassword());
@@ -137,18 +133,7 @@ public class RegistrationController extends BaseAwareController {
             logger.error(ex.getMessage());
         }
     }
-    
-    private List<MessageDTO> parseJsonResponse(ResponseEntity<String> response) {
-        JsonParser jsonParser = new BasicJsonParser();           
-        List<Object> list = jsonParser.parseList(response.getBody());
-        List<MessageDTO> messages = new ArrayList<>();
-        for (Object object : list) {
-            Map<String, String> obj = (Map<String, String>) object;
-            messages.add(new MessageDTO(obj.get("type"), obj.get("message"), obj.get("field")));
-        }
-        return messages;
-    }
-    
+       
     private void validateFields(MessageDTO message) {
         switch(message.getField()) {
             case "username" :

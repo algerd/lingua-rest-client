@@ -9,12 +9,16 @@ import org.springframework.hateoas.PagedResources;
 import org.springframework.hateoas.Resource;
 import org.springframework.hateoas.Resources;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 public interface CrudRepository<T extends Entity> extends ChangeRepository<T> {
     
+    ResponseEntity<String> post(String rel, T entity) throws URISyntaxException;
+    ResponseEntity<String> post(T entity) throws URISyntaxException;
+    ResponseEntity<String> put(Resource<T> resource) throws URISyntaxException;
+    
     URI save(String rel, T entity) throws URISyntaxException;    
-    URI save(T entity) throws URISyntaxException;    
-    HttpStatus save(String absRef) throws URISyntaxException;       
+    URI save(T entity) throws URISyntaxException;         
     Resource<T> update(Resource<T> resource) throws URISyntaxException;
     
     void delete(Resource<T> resource) throws URISyntaxException;   
@@ -24,8 +28,8 @@ public interface CrudRepository<T extends Entity> extends ChangeRepository<T> {
     void saveImage(Resource<T> resource, Image image);    
     HttpStatus postImage(Resource<T> resource, Image image);    
     void deleteImage(Resource<T> resource);
-       
-    Resource<T> saveAndGetResource(T entity) throws URISyntaxException;
+    
+    Resource<T> getResource(URI uri);
     Resource<T> getResource(String path) throws URISyntaxException;    
     Resources<Resource<T>> getResources() throws URISyntaxException;
     Resources<Resource<T>> getResources(String[] rels) throws URISyntaxException;   

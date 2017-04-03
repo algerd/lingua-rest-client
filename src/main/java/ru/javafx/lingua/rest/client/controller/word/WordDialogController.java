@@ -9,19 +9,20 @@ import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import org.springframework.context.annotation.Scope;
-import ru.javafx.lingua.rest.client.core.gui.BaseDialogController;
-import ru.javafx.lingua.rest.client.entity.Word;
-import ru.javafx.lingua.rest.client.fxintegrity.FXMLController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.hateoas.Resource;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.client.HttpClientErrorException;
+import ru.javafx.lingua.rest.client.core.gui.BaseDialogController;
+import ru.javafx.lingua.rest.client.entity.Word;
+import ru.javafx.lingua.rest.client.fxintegrity.FXMLController;
 import ru.javafx.lingua.rest.client.core.datacore.impl.WrapChangedEntity;
 import ru.javafx.lingua.rest.client.core.gui.inputImageBox.DialogImageBoxController;
 import ru.javafx.lingua.rest.client.core.gui.utils.Helper;
+import ru.javafx.lingua.rest.client.message.ErrorMessage;
 import ru.javafx.lingua.rest.client.message.ErrorMessageHandler;
-import ru.javafx.lingua.rest.client.message.MessageDTO;
-import ru.javafx.lingua.rest.client.message.MessageType;
 import ru.javafx.lingua.rest.client.repository.WordRepository;
 
 @FXMLController(
@@ -64,20 +65,26 @@ public class WordDialogController extends BaseDialogController<Word> {
         word.setTranscription(transcriptionTextField.getText().trim());
         word.setTranslation(translationTextField.getText().trim());
         
-        List<MessageDTO> messages = errorMessageHandler.getErrorMessages(word);
+        List<ErrorMessage> messages = errorMessageHandler.getErrorMessages(word);
         if (messages.isEmpty()) {
             messages.addAll(validateInput());                           
         }
         if (messages.isEmpty()) { 
             try { 
-                if (edit) {
-                    resource.getContent().setWord(word.getWord());
-                    resource.getContent().setTranscription(word.getTranscription());
-                    resource.getContent().setTranslation(word.getTranslation());
-                    resource = wordRepository.update(resource);
-                } else {
-                    resource = wordRepository.saveAndGetResource(word);
-                }
+                try {
+                    if (edit) {
+                        resource.getContent().setWord(word.getWord());
+                        resource.getContent().setTranscription(word.getTranscription());
+                        resource.getContent().setTranslation(word.getTranslation());
+                        wordRepository.put(resource);     
+                    } else {
+                        ResponseEntity<String> response = wordRepository.post(word);
+                        resource = wordRepository.getResource(response.getHeaders().getLocation());
+                    }
+                } catch (HttpClientErrorException ex) {
+                    errorMessage(ErrorMessage.parseJsonResponse(ex.getResponseBodyAsString()));
+                    return;
+                }    
                 
                 if (includedDialogImageBoxController.isChangedImage()) {
                     wordRepository.saveImage(resource, includedDialogImageBoxController.getImage());
@@ -98,18 +105,17 @@ public class WordDialogController extends BaseDialogController<Word> {
         }
     }
     
-    private List<MessageDTO> validateInput() {
-        List<MessageDTO> messages = new ArrayList<>();
+    private List<ErrorMessage> validateInput() {
+        List<ErrorMessage> messages = new ArrayList<>();
         try {
             String wordText = wordTextField.getText().trim().toLowerCase();
             if ((!edit || !resource.getContent().getWord().toLowerCase().equals(wordText)) && 
                     wordRepository.getPagedResources("word=" + wordText.trim().toLowerCase()).getMetadata().getTotalElements() > 0) {
                 
-                messages.add(new MessageDTO(
-                    MessageType.ERROR.toString(),
-                    messageSource.getMessage("error.word.word.duplicate", null, LocaleContextHolder.getLocale()),
-                    "word"
-                ));
+                ErrorMessage errorMessage = new ErrorMessage();             
+                errorMessage.setProperty("word");
+                errorMessage.setMessage(messageSource.getMessage("error.word.word.duplicate", null, LocaleContextHolder.getLocale()));               
+                messages.add(errorMessage);
             }
         } catch (URISyntaxException ex) {
             logger.error(ex.getMessage());

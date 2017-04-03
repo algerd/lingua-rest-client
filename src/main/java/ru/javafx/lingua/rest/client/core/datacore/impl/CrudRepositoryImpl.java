@@ -30,6 +30,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
 @SuppressWarnings("unchecked")
@@ -42,25 +43,35 @@ public abstract class CrudRepositoryImpl<T extends Entity> extends ChangeReposit
     @Override
     public URI save(String rel, T entity) throws URISyntaxException {
         URI uri = new URI(basePath + rel); 
-        
-        logger.info("{}", uri.getPath());
-        logger.info("{}", entity);
-        
         HttpEntity<Entity> request = new HttpEntity<>(entity, sessionManager.createSessionHeaders());
-        RestTemplate restTemplate = new RestTemplate();  
-        return restTemplate.exchange(uri, HttpMethod.POST, request, String.class).getHeaders().getLocation();
+        return new RestTemplate().exchange(uri, HttpMethod.POST, request, String.class).getHeaders().getLocation();
     }
     
     @Override
     public URI save(T entity) throws URISyntaxException {
         return save(relPath, entity);
     }
+
+    @Override
+    public ResponseEntity<String> post(String rel, T entity) throws URISyntaxException {
+        URI uri = new URI(basePath + rel);
+        HttpEntity<Entity> request = new HttpEntity<>(entity, sessionManager.createSessionHeaders());        
+        return new RestTemplate().exchange(uri, HttpMethod.POST, request, String.class);
+    }
     
     @Override
-    public HttpStatus save(String absRef) throws URISyntaxException {          
-        return new RestTemplate().exchange(new URI(absRef), HttpMethod.POST, new HttpEntity(sessionManager.createSessionHeaders()), String.class).getStatusCode();
+    public ResponseEntity<String> post(T entity) throws URISyntaxException {
+        return post(relPath, entity);
     }
-     
+    
+    
+    @Override
+    public ResponseEntity<String> put(Resource<T> resource) throws URISyntaxException {
+        URI uri = new URI(resource.getLink("self").getHref()); 
+        HttpEntity request = new HttpEntity(resource.getContent(), sessionManager.createSessionHeaders());
+        return new RestTemplate().exchange(uri, HttpMethod.PUT, request, String.class);
+    }
+        
     @Override
     public Resource<T> update(Resource<T> resource) throws URISyntaxException {  
         URI uri = new URI(resource.getLink("self").getHref()); 
@@ -139,18 +150,18 @@ public abstract class CrudRepositoryImpl<T extends Entity> extends ChangeReposit
             logger.error(ex.getMessage());
         }      
     }
-       
-    @Override
-    public Resource<T> saveAndGetResource(T entity) throws URISyntaxException {
-        return new Traverson(save(relPath, entity), MediaTypes.HAL_JSON)//
-                .follow("self")
-                .withHeaders(sessionManager.createSessionHeaders())
-                .toObject(resourceParameterizedType);
-    }
 
     @Override
     public Resource<T> getResource(String path) throws URISyntaxException {       
         return new Traverson(new URI(path), MediaTypes.HAL_JSON)//
+                .follow("self")
+                .withHeaders(sessionManager.createSessionHeaders())
+                .toObject(resourceParameterizedType);
+    }
+    
+    @Override
+    public Resource<T> getResource(URI uri) {       
+        return new Traverson(uri, MediaTypes.HAL_JSON)//
                 .follow("self")
                 .withHeaders(sessionManager.createSessionHeaders())
                 .toObject(resourceParameterizedType);
