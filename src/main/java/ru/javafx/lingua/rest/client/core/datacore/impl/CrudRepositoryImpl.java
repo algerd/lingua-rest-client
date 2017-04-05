@@ -58,12 +58,22 @@ public abstract class CrudRepositoryImpl<T extends Entity> extends ChangeReposit
         HttpEntity<Entity> request = new HttpEntity<>(entity, sessionManager.createSessionHeaders());        
         return new RestTemplate().exchange(uri, HttpMethod.POST, request, String.class);
     }
-    
+      
     @Override
     public ResponseEntity<String> post(T entity) throws URISyntaxException {
         return post(relPath, entity);
     }
+   
+    @Override
+    public ResponseEntity<String> freePost(String rel, T entity) throws URISyntaxException {
+        URI uri = new URI(basePath + rel);      
+        return new RestTemplate().exchange(uri, HttpMethod.POST, new HttpEntity<>(entity), String.class);
+    }
     
+    @Override
+    public ResponseEntity<String> freePost(T entity) throws URISyntaxException {
+        return freePost(relPath, entity);
+    }
     
     @Override
     public ResponseEntity<String> put(Resource<T> resource) throws URISyntaxException {

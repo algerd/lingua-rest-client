@@ -66,7 +66,7 @@ public class SessionManagerImpl implements SessionManager {
             
             String setCookie = connection.getHeaderField(HttpHeaders.SET_COOKIE);
             if (connection.getResponseCode() != 200 || setCookie == null) {
-                logger.debug("Response Code {}", connection.getResponseCode());
+                //logger.info("Session Authorize Response Code {}", connection.getResponseCode());
                 throw new IOException("Error Connection");               
             }           
            
@@ -77,7 +77,7 @@ public class SessionManagerImpl implements SessionManager {
                     break;
                 }
             }
-            logger.info("JSESSIONID = {}", sessionId);
+            //logger.info("JSESSIONID = {}", sessionId);
 		} catch (IOException e) {
 			logger.error(e.getMessage());
             //System.exit(0);

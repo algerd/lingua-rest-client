@@ -57,42 +57,5 @@ public class ErrorMessageHandler {
             //logger.info("MessageDTO: {}", messageDTO);
         });   
     } 
-    
-    public List<MessageDTO> getErrorMessagesDTO(Object obj) {
-        
-        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-        Validator validator = factory.getValidator();
-        Set<ConstraintViolation<Object>> constraintViolations = validator.validate(obj);
-        List<MessageDTO> messages = new ArrayList<>();
-        
-        constraintViolations.forEach(constraintViolation -> {           
-            Locale currentLocale = LocaleContextHolder.getLocale();        
-            String message = messageSource.getMessage(constraintViolation.getMessage(), null, currentLocale);
-            String fieldname = constraintViolation.getPropertyPath().toString();
-            Object invalidValue = constraintViolation.getInvalidValue();
-            MessageDTO messageDTO = new MessageDTO(MessageType.ERROR.toString(), message, fieldname, invalidValue);
-            messages.add(messageDTO);
-            //logger.info("MessageDTO: {}", messageDTO);
-        });
-        return messages;    
-    }
-    
-    
-    
-    public void getErrorMessagesDTO(Object obj, List<MessageDTO> messages) {
-        
-        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-        Validator validator = factory.getValidator();
-        Set<ConstraintViolation<Object>> constraintViolations = validator.validate(obj);
-        
-        constraintViolations.forEach(constraintViolation -> {           
-            Locale currentLocale = LocaleContextHolder.getLocale();        
-            String message = messageSource.getMessage(constraintViolation.getMessage(), null, currentLocale);
-            String fieldname = constraintViolation.getPropertyPath().toString();
-            MessageDTO messageDTO = new MessageDTO(MessageType.ERROR.toString(), message, fieldname);
-            messages.add(messageDTO);
-            //logger.info("MessageDTO: {}", messageDTO);
-        });   
-    }
- 
+   
 }

@@ -27,15 +27,16 @@ public class Authorization {
     @Autowired
     private UserRepository userRepository;
     
-    private boolean checkPpoperties() {
+    private boolean checkProperties() {
         return authorizationProperties.isUsernameAndPassword();
     }
           
     public boolean check() {
-        isAuthorize = checkPpoperties() && checkAuthorization();       
+        isAuthorize = checkProperties() && checkAuthorization();        
         if (isAuthorize()) {
             try {
                 user = userRepository.findByUsername(authorizationProperties.getUsername());
+                //logger.info("Autorization User: {}", user);
             } catch (URISyntaxException ex) {
                 logger.error(ex.getMessage());
                 isAuthorize = false;
@@ -57,7 +58,7 @@ public class Authorization {
             String encoding = Base64.getEncoder().encodeToString(authorStr.getBytes("utf-8"));
 			connection.setRequestProperty(HttpHeaders.AUTHORIZATION, "Basic " + encoding); 
            
-            logger.info("ResponseCode: {}", connection.getResponseCode());            
+            logger.info("Authorization ResponseCode: {}", connection.getResponseCode());            
             switch (connection.getResponseCode()) {
                 case 200:
                     return true;

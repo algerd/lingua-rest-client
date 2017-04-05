@@ -21,7 +21,6 @@ public class AuthorizationProperties {
     private String password;
     private String mail;
     private String url;
-    private String registrationurl;
 
     public String getUsername() {
         return username;
@@ -55,14 +54,6 @@ public class AuthorizationProperties {
         this.url = url;
     }
 
-    public String getRegistrationurl() {
-        return registrationurl;
-    }
-
-    public void setRegistrationurl(String registrationurl) {
-        this.registrationurl = registrationurl;
-    }
- 
     public void updatePropertiesFile() {
         try {          
             PropertiesConfiguration properties = new PropertiesConfiguration(AUTHORIZATION_REL_PATH);

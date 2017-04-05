@@ -13,7 +13,7 @@ public class ErrorMessage {
     
     private String entity;
     private String property;   
-    private String invalidValue;
+    private Object invalidValue;
     private String message;
     
     private static final Logger logger = LoggerFactory.getLogger(ErrorMessage.class);
@@ -22,7 +22,7 @@ public class ErrorMessage {
       super();
     }
 
-    public ErrorMessage(String entity, String property, String invalidValue, String message) {
+    public ErrorMessage(String entity, String property, Object invalidValue, String message) {
         super();
         this.entity = entity;
         this.property = property;
@@ -37,12 +37,12 @@ public class ErrorMessage {
             Map<String, Object> responseMap = jsonParser.parseMap(response);
             List<Object> errorsList = (List<Object>) responseMap.get("errors");            
             for (Object object : errorsList) {
-                Map<String, String> obj = (Map<String, String>) object;
+                Map<String, Object> obj = (Map<String, Object>) object;
                 ErrorMessage msg = new ErrorMessage(
-                        obj.get("entity"), 
-                        obj.get("property"),
+                        obj.get("entity").toString(), 
+                        obj.get("property").toString(),
                         obj.get("invalidValue"),
-                        obj.get("message"));                                         
+                        obj.get("message").toString());                                         
                 //logger.info("error: {}", msg);
                 messages.add(msg);
             }
@@ -70,7 +70,7 @@ public class ErrorMessage {
         return invalidValue;
     }
 
-    public void setInvalidValue(String invalidValue) {
+    public void setInvalidValue(Object invalidValue) {
         this.invalidValue = invalidValue;
     }
 

@@ -1,9 +1,9 @@
 
 package ru.javafx.lingua.rest.client.authorization;
 
-import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
@@ -12,20 +12,19 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javax.xml.ws.http.HTTPException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.client.RestTemplate;
 import ru.javafx.lingua.rest.client.controller.words.WordsController;
 import ru.javafx.lingua.rest.client.entity.User;
 import ru.javafx.lingua.rest.client.fxintegrity.FXMLController;
-import ru.javafx.lingua.rest.client.message.MessageDTO;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.web.client.HttpClientErrorException;
 import ru.javafx.lingua.rest.client.core.gui.BaseAwareController;
 import ru.javafx.lingua.rest.client.core.gui.utils.Helper;
+import ru.javafx.lingua.rest.client.message.ErrorMessage;
 import ru.javafx.lingua.rest.client.message.ErrorMessageHandler;
-import ru.javafx.lingua.rest.client.message.MessageType;
+import ru.javafx.lingua.rest.client.repository.UserRepository;
 
 @FXMLController(
     value = "/fxml/authorization/Registration.fxml",    
@@ -40,6 +39,8 @@ public class RegistrationController extends BaseAwareController {
     private ErrorMessageHandler errorMessageHandler;
     @Autowired
     private MessageSource messageSource;
+    @Autowired
+    private UserRepository userRepository;
     
     @FXML
     private TextField usernameTextField;
@@ -67,7 +68,7 @@ public class RegistrationController extends BaseAwareController {
         Helper.limitTextInput(passwordField1, 64);
         Helper.limitTextInput(passwordField2, 64);
     }
-  
+
     @FXML
     private void handleOkButton() {
         clearErrorLabels();
@@ -76,8 +77,10 @@ public class RegistrationController extends BaseAwareController {
         user.setPassword(passwordField1.getText().trim());
         user.setMail(mailTextField.getText().trim());
         
-        List<MessageDTO> messages = errorMessageHandler.getErrorMessagesDTO(user);
-        validateInput(messages);
+        List<ErrorMessage> messages = errorMessageHandler.getErrorMessages(user);
+        if (messages.isEmpty()) {
+            messages.addAll(validateInput());                           
+        }
         //logger.info("ErrorMessages: {}", messages);
         
         if (messages.isEmpty()) {
@@ -94,62 +97,56 @@ public class RegistrationController extends BaseAwareController {
         password2ErrorLabel.setText("");
     }
     
-    private void validateInput(List<MessageDTO> messages) {
+    private List<ErrorMessage> validateInput() {
+        List<ErrorMessage> messages = new ArrayList<>();
         if (!passwordField1.getText().trim().equals(passwordField2.getText().trim())) {
-            messages.add(new MessageDTO(
-                    MessageType.ERROR.toString(),
-                    messageSource.getMessage("error.user.password.repeat", null, LocaleContextHolder.getLocale()),
-                    "password2"
-            ));
+            ErrorMessage errorMessage = new ErrorMessage();             
+            errorMessage.setProperty("password2");
+            errorMessage.setMessage(messageSource.getMessage("error.user.password.repeat", null, LocaleContextHolder.getLocale()));               
+            messages.add(errorMessage);
         }
+        return messages;
     }
     
     private void registr() {
-        try { 
-            URI uri = new URI(authorizationProperties.getRegistrationurl());        
-            RestTemplate restTemplate = new RestTemplate();       
-            ResponseEntity<String> response = restTemplate.postForEntity(uri, new HttpEntity<>(user), String.class);
-            //logger.info("Registration ResponseCode: {}", response.getStatusCode());
-            
-            if (response.getStatusCode().equals(HttpStatus.OK)) {            
-                //logger.info("Registration ResponseBody: {}", response.getBody());          
-                List<MessageDTO> messages = MessageDTO.parseJsonResponse(response);
-                if (messages.isEmpty()) { 
+        try {
+            try {
+                ResponseEntity<String> response = userRepository.freePost(user);
+                if (response.getStatusCode().equals(HttpStatus.CREATED)) {
                     authorizationProperties.setUsername(user.getUsername());
                     authorizationProperties.setPassword(user.getPassword());
                     authorizationProperties.setMail(user.getMail());
                     authorizationProperties.updatePropertiesFile();
                     if (authorization.check()) {
                         requestViewService.showTab(WordsController.class);
-                    }    
-                } else {
-                    messages.forEach(this::validateFields);
+                    } 
+                }    
+            } catch (HttpClientErrorException ex) {
+                if (ex.getStatusCode().equals(HttpStatus.BAD_REQUEST)) {
+                    ErrorMessage.parseJsonResponse(ex.getResponseBodyAsString()).forEach(this::validateFields);
                 }
-            } else {
-                throw new HTTPException(response.getStatusCode().value());
             }
-        }  
-        catch (URISyntaxException | HTTPException ex) {
+        } catch (URISyntaxException | HTTPException ex) {
             logger.error(ex.getMessage());
-        }
+        }    
     }
-       
-    private void validateFields(MessageDTO message) {
-        switch(message.getField()) {
+      
+    private void validateFields(ErrorMessage errorMessage) {
+        switch(errorMessage.getProperty()) {
             case "username" :
-                loginErrorLabel.setText(message.getMessage());
+                loginErrorLabel.setText(errorMessage.getMessage());
                 break;
             case "mail" :
-                mailErrorLabel.setText(message.getMessage());
+                mailErrorLabel.setText(errorMessage.getMessage());
                 break;
             case "password" :
-                password1ErrorLabel.setText(message.getMessage());
+                password1ErrorLabel.setText(errorMessage.getMessage());
                 break;
             case "password2" :
-                password2ErrorLabel.setText(message.getMessage());
+                password2ErrorLabel.setText(errorMessage.getMessage());
                 break;
             default:
-                errorLabel.setText(message.getMessage());
+                errorLabel.setText(errorMessage.getMessage());
                 break; 
         }
     }

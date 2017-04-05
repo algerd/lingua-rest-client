@@ -8,7 +8,6 @@ import javafx.stage.Stage;
 import org.springframework.hateoas.Resource;
 import ru.javafx.lingua.rest.client.core.Entity;
 import ru.javafx.lingua.rest.client.message.ErrorMessage;
-import ru.javafx.lingua.rest.client.message.MessageDTO;
 
 public abstract class BaseDialogController<T extends Entity> extends BaseAwareController implements DialogController<T> {
     

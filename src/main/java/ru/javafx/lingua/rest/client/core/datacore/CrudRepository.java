@@ -17,6 +17,9 @@ public interface CrudRepository<T extends Entity> extends ChangeRepository<T> {
     ResponseEntity<String> post(T entity) throws URISyntaxException;
     ResponseEntity<String> put(Resource<T> resource) throws URISyntaxException;
     
+    ResponseEntity<String> freePost(String rel, T entity) throws URISyntaxException;
+    ResponseEntity<String> freePost(T entity) throws URISyntaxException;
+    
     URI save(String rel, T entity) throws URISyntaxException;    
     URI save(T entity) throws URISyntaxException;         
     Resource<T> update(Resource<T> resource) throws URISyntaxException;
