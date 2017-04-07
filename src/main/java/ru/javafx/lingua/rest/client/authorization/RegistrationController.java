@@ -14,12 +14,12 @@ import javax.xml.ws.http.HTTPException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import ru.javafx.lingua.rest.client.controller.words.WordsController;
 import ru.javafx.lingua.rest.client.entity.User;
 import ru.javafx.lingua.rest.client.fxintegrity.FXMLController;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.web.client.HttpClientErrorException;
+import ru.javafx.lingua.rest.client.controller.words.WordsController;
 import ru.javafx.lingua.rest.client.core.gui.BaseAwareController;
 import ru.javafx.lingua.rest.client.core.gui.utils.Helper;
 import ru.javafx.lingua.rest.client.message.ErrorMessage;
@@ -35,6 +35,8 @@ public class RegistrationController extends BaseAwareController {
     
     @Autowired
     private AuthorizationProperties authorizationProperties;
+    @Autowired
+    private Authorization authorizationChecker;
     @Autowired
     private ErrorMessageHandler errorMessageHandler;
     @Autowired
@@ -68,6 +70,15 @@ public class RegistrationController extends BaseAwareController {
         Helper.limitTextInput(passwordField1, 64);
         Helper.limitTextInput(passwordField2, 64);
     }
+    
+    @FXML 
+    private void onLinkAuthorization() {
+        if (!authorizationChecker.check()) {
+            requestViewService.showPane(AuthorizationController.class);
+        } else {
+            requestViewService.showTab(WordsController.class);
+        } 
+    }
 
     @FXML
     private void handleOkButton() {
@@ -95,6 +106,7 @@ public class RegistrationController extends BaseAwareController {
         mailErrorLabel.setText("");
         password1ErrorLabel.setText("");
         password2ErrorLabel.setText("");
+        errorLabel.setText("");
     }
     
     private List<ErrorMessage> validateInput() {
@@ -117,9 +129,7 @@ public class RegistrationController extends BaseAwareController {
                     authorizationProperties.setPassword(user.getPassword());
                     authorizationProperties.setMail(user.getMail());
                     authorizationProperties.updatePropertiesFile();
-                    if (authorization.check()) {
-                        requestViewService.showTab(WordsController.class);
-                    } 
+                    errorLabel.setText(messageSource.getMessage("info.auth.confirm", null, "info.auth.confirm", LocaleContextHolder.getLocale()));              
                 }    
             } catch (HttpClientErrorException ex) {
                 if (ex.getStatusCode().equals(HttpStatus.BAD_REQUEST)) {

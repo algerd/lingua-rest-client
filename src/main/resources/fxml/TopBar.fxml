@@ -14,6 +14,7 @@
                 <Button mnemonicParsing="false" onAction="#showUsers" text="Users" />
                 <Button mnemonicParsing="false" onAction="#logout" text="logout" />
                 <Button mnemonicParsing="false" onAction="#showAccount" text="Account" />
+                <Button mnemonicParsing="false" onAction="#showAuthorize" text="Authorize" />
             </children>
             <opaqueInsets>
                 <Insets />

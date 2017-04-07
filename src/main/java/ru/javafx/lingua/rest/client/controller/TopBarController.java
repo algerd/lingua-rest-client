@@ -5,6 +5,7 @@ import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.scene.layout.AnchorPane;
 import org.springframework.beans.factory.annotation.Autowired;
+import ru.javafx.lingua.rest.client.authorization.Authorization;
 import ru.javafx.lingua.rest.client.authorization.AuthorizationController;
 import ru.javafx.lingua.rest.client.controller.user.UserPaneController;
 import ru.javafx.lingua.rest.client.controller.users.UsersController;
@@ -18,6 +19,8 @@ public class TopBarController extends BaseAwareController {
          
     @Autowired
     private MainController parentController;
+    @Autowired
+    private Authorization authorizationChecker;
     
     @FXML
     private AnchorPane topBar;
@@ -53,6 +56,15 @@ public class TopBarController extends BaseAwareController {
         if (authorization.isAuthorize()) {
             requestViewService.showTab(UserPaneController.class, authorization.getUser());
         }
+    }
+    
+    @FXML
+    private void showAuthorize() {
+        if (!authorizationChecker.check()) {
+            requestViewService.showPane(AuthorizationController.class);
+        } else {
+            requestViewService.showTab(WordsController.class);
+        } 
     }
      
 }

@@ -32,7 +32,8 @@ public class Authorization {
     }
           
     public boolean check() {
-        isAuthorize = checkProperties() && checkAuthorization();        
+        isAuthorize = checkProperties() && checkAuthorization();    
+        //logger.info("isAuthorize: {}", isAuthorize);
         if (isAuthorize()) {
             try {
                 user = userRepository.findByUsername(authorizationProperties.getUsername());

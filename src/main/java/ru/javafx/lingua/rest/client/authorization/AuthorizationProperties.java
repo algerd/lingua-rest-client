@@ -68,6 +68,8 @@ public class AuthorizationProperties {
     }
     
     public boolean isUsernameAndPassword() {
+        //logger.info("isUsernameAndPassword username: {}", username);
+        //logger.info("isUsernameAndPassword password: {}", password);
         return username != null && !username.equals("") && password != null && !password.equals("");
     }
 
