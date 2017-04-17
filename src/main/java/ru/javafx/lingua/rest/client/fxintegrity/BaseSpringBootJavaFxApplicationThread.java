@@ -69,8 +69,9 @@ public abstract class BaseSpringBootJavaFxApplicationThread extends Application 
     @Override
     public void stop() throws Exception {
         super.stop();
-        Platform.exit();
         springContext.close();
+        Platform.exit();
+        System.exit(0);
     }
 
     protected static void launchApp(

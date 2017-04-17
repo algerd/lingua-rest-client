@@ -1,6 +1,7 @@
 package ru.javafx.lingua.rest.client.fxintegrity;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import org.slf4j.Logger;
@@ -47,6 +48,8 @@ public abstract class BaseSpringBootJavaFxApplication extends Application {
     public void stop() throws Exception {
         super.stop();
         springContext.close();
+        Platform.exit();
+        System.exit(0);
     }
     
     protected static void launchApp(
